@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>437239326055-oi1b3eob79vmpoa6dbar050e0q77mnn3.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.437239326055-oi1b3eob79vmpoa6dbar050e0q77mnn3</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDzc51RpJdymro44yL1NCwOP9YxpCH0cNg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>437239326055</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.sector.qazzoo</string>
+	<key>PROJECT_ID</key>
+	<string>sal-qazzoo</string>
+	<key>STORAGE_BUCKET</key>
+	<string>sal-qazzoo.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:437239326055:ios:71b36146a2ff1e09e8fbc2</string>
+</dict>
+</plist>

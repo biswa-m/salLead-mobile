@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "437239326055",
+    "project_id": "sal-qazzoo",
+    "storage_bucket": "sal-qazzoo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:437239326055:android:cba28be1e8233106e8fbc2",
+        "android_client_info": {
+          "package_name": "com.qazzoo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "437239326055-m5509f8v0ocnsa0ui9bnuhgadf3makdu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7pMeZQxI_QFus9qh5IZR_N7WxfkMOQvo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "437239326055-m5509f8v0ocnsa0ui9bnuhgadf3makdu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
