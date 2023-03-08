@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>437239326055-oi1b3eob79vmpoa6dbar050e0q77mnn3.apps.googleusercontent.com</string>
+	<string>749472643752-i9jljv7s0951kaq6oeetk23iuigudb5c.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.437239326055-oi1b3eob79vmpoa6dbar050e0q77mnn3</string>
+	<string>com.googleusercontent.apps.749472643752-i9jljv7s0951kaq6oeetk23iuigudb5c</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDzc51RpJdymro44yL1NCwOP9YxpCH0cNg</string>
+	<string>AIzaSyBIFMlT5QRJpg9rGqQoP_ztemz_FE5TO3k</string>
 	<key>GCM_SENDER_ID</key>
-	<string>437239326055</string>
+	<string>749472643752</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.sector.qazzoo</string>
+	<string>sal.portfolio.lead</string>
 	<key>PROJECT_ID</key>
-	<string>sal-qazzoo</string>
+	<string>salportfolio-fef8d</string>
 	<key>STORAGE_BUCKET</key>
-	<string>sal-qazzoo.appspot.com</string>
+	<string>salportfolio-fef8d.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:437239326055:ios:71b36146a2ff1e09e8fbc2</string>
+	<string>1:749472643752:ios:9808d5fa60428d56e5609d</string>
 </dict>
 </plist>

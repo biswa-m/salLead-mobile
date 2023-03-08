@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* QazzooTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* QazzooTests.m */; };
+		00E356F31AD99517003FC87E /* SalLeadTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* SalLeadTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DE84CF628A7921A001C7EC0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2DE84CF528A7921A001C7EC0 /* GoogleService-Info.plist */; };
 		2DE84CF728A7921A001C7EC0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2DE84CF528A7921A001C7EC0 /* GoogleService-Info.plist */; };
-		51B1F7921361C86B662C51CE /* libPods-Qazzoo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB8CE00317B2E03DC149F8E /* libPods-Qazzoo.a */; };
+		51B1F7921361C86B662C51CE /* libPods-SalLead.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB8CE00317B2E03DC149F8E /* libPods-SalLead.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		F9D43D0FF074EA4DD6485F3A /* libPods-Qazzoo-QazzooTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18D0E204B1475B12A29ACC03 /* libPods-Qazzoo-QazzooTests.a */; };
+		F9D43D0FF074EA4DD6485F3A /* libPods-SalLead-SalLeadTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18D0E204B1475B12A29ACC03 /* libPods-SalLead-SalLeadTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -24,29 +24,29 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = Qazzoo;
+			remoteInfo = SalLead;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		00E356EE1AD99517003FC87E /* QazzooTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QazzooTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* SalLeadTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SalLeadTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* QazzooTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QazzooTests.m; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* Qazzoo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Qazzoo.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Qazzoo/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = Qazzoo/AppDelegate.mm; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Qazzoo/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Qazzoo/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Qazzoo/main.m; sourceTree = "<group>"; };
-		13BCBFA0E15C8FFF17B01227 /* Pods-Qazzoo-QazzooTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Qazzoo-QazzooTests.debug.xcconfig"; path = "Target Support Files/Pods-Qazzoo-QazzooTests/Pods-Qazzoo-QazzooTests.debug.xcconfig"; sourceTree = "<group>"; };
-		18D0E204B1475B12A29ACC03 /* libPods-Qazzoo-QazzooTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Qazzoo-QazzooTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356F21AD99517003FC87E /* SalLeadTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SalLeadTests.m; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* SalLead.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SalLead.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = SalLead/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = SalLead/AppDelegate.mm; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = SalLead/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = SalLead/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = SalLead/main.m; sourceTree = "<group>"; };
+		13BCBFA0E15C8FFF17B01227 /* Pods-SalLead-SalLeadTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SalLead-SalLeadTests.debug.xcconfig"; path = "Target Support Files/Pods-SalLead-SalLeadTests/Pods-SalLead-SalLeadTests.debug.xcconfig"; sourceTree = "<group>"; };
+		18D0E204B1475B12A29ACC03 /* libPods-SalLead-SalLeadTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SalLead-SalLeadTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DE84CF528A7921A001C7EC0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		4350FE474DADFB8DA63E6E27 /* Pods-Qazzoo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Qazzoo.debug.xcconfig"; path = "Target Support Files/Pods-Qazzoo/Pods-Qazzoo.debug.xcconfig"; sourceTree = "<group>"; };
-		4FB8CE00317B2E03DC149F8E /* libPods-Qazzoo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Qazzoo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		59EB620A1FC88BF781091DE6 /* Pods-Qazzoo-QazzooTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Qazzoo-QazzooTests.release.xcconfig"; path = "Target Support Files/Pods-Qazzoo-QazzooTests/Pods-Qazzoo-QazzooTests.release.xcconfig"; sourceTree = "<group>"; };
-		8035C14DF8E45C5B06B2D154 /* Pods-Qazzoo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Qazzoo.release.xcconfig"; path = "Target Support Files/Pods-Qazzoo/Pods-Qazzoo.release.xcconfig"; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Qazzoo/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		CEC6F8AF28AE3B130000A3B4 /* Qazzoo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Qazzoo.entitlements; path = Qazzoo/Qazzoo.entitlements; sourceTree = "<group>"; };
+		4350FE474DADFB8DA63E6E27 /* Pods-SalLead.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SalLead.debug.xcconfig"; path = "Target Support Files/Pods-SalLead/Pods-SalLead.debug.xcconfig"; sourceTree = "<group>"; };
+		4FB8CE00317B2E03DC149F8E /* libPods-SalLead.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SalLead.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		59EB620A1FC88BF781091DE6 /* Pods-SalLead-SalLeadTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SalLead-SalLeadTests.release.xcconfig"; path = "Target Support Files/Pods-SalLead-SalLeadTests/Pods-SalLead-SalLeadTests.release.xcconfig"; sourceTree = "<group>"; };
+		8035C14DF8E45C5B06B2D154 /* Pods-SalLead.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SalLead.release.xcconfig"; path = "Target Support Files/Pods-SalLead/Pods-SalLead.release.xcconfig"; sourceTree = "<group>"; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = SalLead/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		CEC6F8AF28AE3B130000A3B4 /* SalLead.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = SalLead.entitlements; path = SalLead/SalLead.entitlements; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -55,7 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9D43D0FF074EA4DD6485F3A /* libPods-Qazzoo-QazzooTests.a in Frameworks */,
+				F9D43D0FF074EA4DD6485F3A /* libPods-SalLead-SalLeadTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,20 +63,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				51B1F7921361C86B662C51CE /* libPods-Qazzoo.a in Frameworks */,
+				51B1F7921361C86B662C51CE /* libPods-SalLead.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* QazzooTests */ = {
+		00E356EF1AD99517003FC87E /* SalLeadTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* QazzooTests.m */,
+				00E356F21AD99517003FC87E /* SalLeadTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = QazzooTests;
+			path = SalLeadTests;
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -87,10 +87,10 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* Qazzoo */ = {
+		13B07FAE1A68108700A75B9A /* SalLead */ = {
 			isa = PBXGroup;
 			children = (
-				CEC6F8AF28AE3B130000A3B4 /* Qazzoo.entitlements */,
+				CEC6F8AF28AE3B130000A3B4 /* SalLead.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -98,15 +98,15 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
-			name = Qazzoo;
+			name = SalLead;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				4FB8CE00317B2E03DC149F8E /* libPods-Qazzoo.a */,
-				18D0E204B1475B12A29ACC03 /* libPods-Qazzoo-QazzooTests.a */,
+				4FB8CE00317B2E03DC149F8E /* libPods-SalLead.a */,
+				18D0E204B1475B12A29ACC03 /* libPods-SalLead-SalLeadTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -122,9 +122,9 @@
 			isa = PBXGroup;
 			children = (
 				2DE84CF528A7921A001C7EC0 /* GoogleService-Info.plist */,
-				13B07FAE1A68108700A75B9A /* Qazzoo */,
+				13B07FAE1A68108700A75B9A /* SalLead */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* QazzooTests */,
+				00E356EF1AD99517003FC87E /* SalLeadTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
@@ -137,8 +137,8 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* Qazzoo.app */,
-				00E356EE1AD99517003FC87E /* QazzooTests.xctest */,
+				13B07F961A680F5B00A75B9A /* SalLead.app */,
+				00E356EE1AD99517003FC87E /* SalLeadTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -146,10 +146,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				4350FE474DADFB8DA63E6E27 /* Pods-Qazzoo.debug.xcconfig */,
-				8035C14DF8E45C5B06B2D154 /* Pods-Qazzoo.release.xcconfig */,
-				13BCBFA0E15C8FFF17B01227 /* Pods-Qazzoo-QazzooTests.debug.xcconfig */,
-				59EB620A1FC88BF781091DE6 /* Pods-Qazzoo-QazzooTests.release.xcconfig */,
+				4350FE474DADFB8DA63E6E27 /* Pods-SalLead.debug.xcconfig */,
+				8035C14DF8E45C5B06B2D154 /* Pods-SalLead.release.xcconfig */,
+				13BCBFA0E15C8FFF17B01227 /* Pods-SalLead-SalLeadTests.debug.xcconfig */,
+				59EB620A1FC88BF781091DE6 /* Pods-SalLead-SalLeadTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -157,9 +157,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* QazzooTests */ = {
+		00E356ED1AD99517003FC87E /* SalLeadTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "QazzooTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "SalLeadTests" */;
 			buildPhases = (
 				FEFDBD740DE554E9C823F24E /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
@@ -173,14 +173,14 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = QazzooTests;
-			productName = QazzooTests;
-			productReference = 00E356EE1AD99517003FC87E /* QazzooTests.xctest */;
+			name = SalLeadTests;
+			productName = SalLeadTests;
+			productReference = 00E356EE1AD99517003FC87E /* SalLeadTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* Qazzoo */ = {
+		13B07F861A680F5B00A75B9A /* SalLead */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Qazzoo" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "SalLead" */;
 			buildPhases = (
 				FC5DDE05DAB037CEE59FD847 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -196,9 +196,9 @@
 			);
 			dependencies = (
 			);
-			name = Qazzoo;
-			productName = Qazzoo;
-			productReference = 13B07F961A680F5B00A75B9A /* Qazzoo.app */;
+			name = SalLead;
+			productName = SalLead;
+			productReference = 13B07F961A680F5B00A75B9A /* SalLead.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -218,7 +218,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Qazzoo" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "SalLead" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -231,8 +231,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* Qazzoo */,
-				00E356ED1AD99517003FC87E /* QazzooTests */,
+				13B07F861A680F5B00A75B9A /* SalLead */,
+				00E356ED1AD99517003FC87E /* SalLeadTests */,
 			);
 		};
 /* End PBXProject section */
@@ -294,15 +294,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Qazzoo/Pods-Qazzoo-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-SalLead/Pods-SalLead-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Qazzoo/Pods-Qazzoo-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-SalLead/Pods-SalLead-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Qazzoo/Pods-Qazzoo-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SalLead/Pods-SalLead-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		7FF20472EF47DBBECCECAC31 /* [CP] Embed Pods Frameworks */ = {
@@ -311,15 +311,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Qazzoo-QazzooTests/Pods-Qazzoo-QazzooTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-SalLead-SalLeadTests/Pods-SalLead-SalLeadTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Qazzoo-QazzooTests/Pods-Qazzoo-QazzooTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-SalLead-SalLeadTests/Pods-SalLead-SalLeadTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Qazzoo-QazzooTests/Pods-Qazzoo-QazzooTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SalLead-SalLeadTests/Pods-SalLead-SalLeadTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DEB32964F3C010279F7C823E /* [CP] Embed Pods Frameworks */ = {
@@ -328,15 +328,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Qazzoo/Pods-Qazzoo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-SalLead/Pods-SalLead-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Qazzoo/Pods-Qazzoo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-SalLead/Pods-SalLead-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Qazzoo/Pods-Qazzoo-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SalLead/Pods-SalLead-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F726FAE7A76DF9F43B8E0A0E /* [CP] Copy Pods Resources */ = {
@@ -345,15 +345,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Qazzoo-QazzooTests/Pods-Qazzoo-QazzooTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-SalLead-SalLeadTests/Pods-SalLead-SalLeadTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Qazzoo-QazzooTests/Pods-Qazzoo-QazzooTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-SalLead-SalLeadTests/Pods-SalLead-SalLeadTests-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Qazzoo-QazzooTests/Pods-Qazzoo-QazzooTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SalLead-SalLeadTests/Pods-SalLead-SalLeadTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FC5DDE05DAB037CEE59FD847 /* [CP] Check Pods Manifest.lock */ = {
@@ -371,7 +371,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Qazzoo-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-SalLead-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -412,7 +412,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Qazzoo-QazzooTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-SalLead-SalLeadTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -426,7 +426,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* QazzooTests.m in Sources */,
+				00E356F31AD99517003FC87E /* SalLeadTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,7 +444,7 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* Qazzoo */;
+			target = 13B07F861A680F5B00A75B9A /* SalLead */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -452,14 +452,14 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 13BCBFA0E15C8FFF17B01227 /* Pods-Qazzoo-QazzooTests.debug.xcconfig */;
+			baseConfigurationReference = 13BCBFA0E15C8FFF17B01227 /* Pods-SalLead-SalLeadTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = QazzooTests/Info.plist;
+				INFOPLIST_FILE = SalLeadTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -473,17 +473,17 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Qazzoo.app/Qazzoo";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SalLead.app/SalLead";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 59EB620A1FC88BF781091DE6 /* Pods-Qazzoo-QazzooTests.release.xcconfig */;
+			baseConfigurationReference = 59EB620A1FC88BF781091DE6 /* Pods-SalLead-SalLeadTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = QazzooTests/Info.plist;
+				INFOPLIST_FILE = SalLeadTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -497,22 +497,22 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Qazzoo.app/Qazzoo";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SalLead.app/SalLead";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4350FE474DADFB8DA63E6E27 /* Pods-Qazzoo.debug.xcconfig */;
+			baseConfigurationReference = 4350FE474DADFB8DA63E6E27 /* Pods-SalLead.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Qazzoo/Qazzoo.entitlements;
+				CODE_SIGN_ENTITLEMENTS = SalLead/SalLead.entitlements;
 				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 7A8SKPK5CX;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = Qazzoo/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Qazzoo;
+				INFOPLIST_FILE = SalLead/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SalLead;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -523,8 +523,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.sector.qazzoo;
-				PRODUCT_NAME = Qazzoo;
+				PRODUCT_BUNDLE_IDENTIFIER = sal.portfolio.lead;
+				PRODUCT_NAME = SalLead;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -534,15 +534,15 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8035C14DF8E45C5B06B2D154 /* Pods-Qazzoo.release.xcconfig */;
+			baseConfigurationReference = 8035C14DF8E45C5B06B2D154 /* Pods-SalLead.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Qazzoo/Qazzoo.entitlements;
+				CODE_SIGN_ENTITLEMENTS = SalLead/SalLead.entitlements;
 				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 7A8SKPK5CX;
-				INFOPLIST_FILE = Qazzoo/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Qazzoo;
+				INFOPLIST_FILE = SalLead/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SalLead;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -553,8 +553,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.sector.qazzoo;
-				PRODUCT_NAME = Qazzoo;
+				PRODUCT_BUNDLE_IDENTIFIER = sal.portfolio.lead;
+				PRODUCT_NAME = SalLead;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -701,7 +701,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "QazzooTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "SalLeadTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -710,7 +710,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Qazzoo" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "SalLead" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -719,7 +719,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Qazzoo" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "SalLead" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
