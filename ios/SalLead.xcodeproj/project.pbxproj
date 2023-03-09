@@ -505,7 +505,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4350FE474DADFB8DA63E6E27 /* Pods-SalLead.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SalLead/SalLead.entitlements;
 				CURRENT_PROJECT_VERSION = 3;
@@ -536,7 +536,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8035C14DF8E45C5B06B2D154 /* Pods-SalLead.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SalLead/SalLead.entitlements;
 				CURRENT_PROJECT_VERSION = 3;
