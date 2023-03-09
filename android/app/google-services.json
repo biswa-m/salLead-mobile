@@ -1,34 +1,41 @@
 {
   "project_info": {
-    "project_number": "437239326055",
-    "project_id": "sal-qazzoo",
-    "storage_bucket": "sal-qazzoo.appspot.com"
+    "project_number": "749472643752",
+    "project_id": "salportfolio-fef8d",
+    "storage_bucket": "salportfolio-fef8d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:437239326055:android:cba28be1e8233106e8fbc2",
+        "mobilesdk_app_id": "1:749472643752:android:277c61a2c1df49e3e5609d",
         "android_client_info": {
-          "package_name": "com.qazzoo"
+          "package_name": "com.salportfoliolead"
         }
       },
       "oauth_client": [
         {
-          "client_id": "437239326055-m5509f8v0ocnsa0ui9bnuhgadf3makdu.apps.googleusercontent.com",
+          "client_id": "749472643752-d65r1iruncj0hk1kp4kus6j29aapj7cs.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB7pMeZQxI_QFus9qh5IZR_N7WxfkMOQvo"
+          "current_key": "AIzaSyASITMzrsADj7VEwfC_Tke3LQrqrpn6hWg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "437239326055-m5509f8v0ocnsa0ui9bnuhgadf3makdu.apps.googleusercontent.com",
+              "client_id": "749472643752-d65r1iruncj0hk1kp4kus6j29aapj7cs.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "749472643752-i9jljv7s0951kaq6oeetk23iuigudb5c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "sal.portfolio.lead"
+              }
             }
           ]
         }

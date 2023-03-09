@@ -1,4 +1,4 @@
-package com.qazzoo.newarchitecture;
+package com.salportfoliolead.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.qazzoo.BuildConfig;
-import com.qazzoo.newarchitecture.components.MainComponentsRegistry;
-import com.qazzoo.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.salportfoliolead.BuildConfig;
+import com.salportfoliolead.newarchitecture.components.MainComponentsRegistry;
+import com.salportfoliolead.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

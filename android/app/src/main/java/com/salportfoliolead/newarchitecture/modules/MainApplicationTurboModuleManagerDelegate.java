@@ -1,4 +1,4 @@
-package com.qazzoo.newarchitecture.modules;
+package com.salportfoliolead.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;
