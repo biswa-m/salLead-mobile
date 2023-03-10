@@ -7,7 +7,6 @@ import AppComponent from '../../../Components/RN/AppComponent';
 import styles from '../../../Styles/styles';
 import PActions from '../../../Stores/redux/Persisted/Actions';
 import UnpActions from '../../../Stores/redux/Unpersisted/Actions';
-import {logout} from '../../../Modules/auth/logout';
 import {isLoggedIn} from '../../../Stores/redux/Persisted/Selectors';
 import navigationModule from '../../../Modules/navigationModule';
 
@@ -17,13 +16,14 @@ class ProfileInformationScreen extends AppComponent {
       navigationModule.exec('goBack', [null]);
     }
 
-    const {user, account} = this.props.AUTH || {};
+    const {user} = this.props.AUTH || {};
 
     return (
       <View style={[styles.fill, styles.bgLight]}>
         <View style={styles.qzHeaderMinimal}>
           <SafeAreaView edges={['top']}>
-            <TouchableOpacity hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
+            <TouchableOpacity
+              hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
               style={styles.backUnit}
               onPress={() => navigationModule.exec('goBack', [null])}>
               <Image
@@ -37,51 +37,45 @@ class ProfileInformationScreen extends AppComponent {
 
         <View style={styles.qzHeaderSpaceLight}>
           <View style={styles.qzProfileAvatar}>
-            <Image source={{uri: account?.profileImageLargeUrl}} style={styles.qzProfileAvatarIco}/>
+            {user?.photo ? (
+              <Image
+                source={{uri: user?.photo}}
+                style={styles.qzProfileAvatarIco}
+              />
+            ) : (
+              <Image
+                source={require('../../../Assets/img/profile/avatar.png')}
+                style={styles.qzProfileAvatarIco}
+              />
+            )}
           </View>
           <View style={styles.qzProfileAvatarContext}>
-            <Text style={styles.qzProfileAvatarTitleDark}>{user?.userName}</Text>
-            <Text style={styles.qzProfileAvatarSublineDark}>{account?.email}</Text>
+            <Text style={styles.qzProfileAvatarTitleDark}>
+              {user?.fullName}
+            </Text>
+            <Text style={styles.qzProfileAvatarSublineDark}>{user?.email}</Text>
           </View>
         </View>
 
-        <View style={{height:10,width:'100%'}}></View>
+        <View style={{height: 10, width: '100%'}}></View>
 
         <ScrollView style={styles.fill}>
-
           <Text style={styles.qzProfileSubtitle}>Personal Details</Text>
 
           <View style={styles.qzInputGroup}>
             <View style={styles.qzInputItem}>
-              <Text style={styles.qzInputLabel}>Username:</Text>
-              <Text style={styles.qzInputValue}>{user?.userName || 'Blank'}</Text>
+              <Text style={styles.qzInputLabel}>Name:</Text>
+              <Text style={styles.qzInputValue}>{user?.fullName || '-'}</Text>
             </View>
-            <View style={styles.qzInputItem}>
-              <Text style={styles.qzInputLabel}>First Name:</Text>
-              <Text style={styles.qzInputValue}>{account?.firstName || 'Blank'}</Text>
-            </View>
-            <View style={[styles.qzInputItem, styles.qzNoBorderBottom]}>
-              <Text style={styles.qzInputLabel}>Last Name:</Text>
-              <Text style={styles.qzInputValue}>{account?.lastName || 'Blank'}</Text>
-            </View>
-          </View>
-
-          <Text style={styles.qzProfileSubtitle}>More Information</Text>
-
-          <View style={styles.qzInputGroup}>
             <View style={styles.qzInputItem}>
               <Text style={styles.qzInputLabel}>Email:</Text>
-              <Text style={styles.qzInputValue}>{account?.email}</Text>
-            </View>
-            <View style={[styles.qzInputItem, styles.qzNoBorderBottom]}>
-              <Text style={styles.qzInputLabel}>Phone Number:</Text>
-              <Text style={styles.qzInputValue}>{account?.displayPhone || 'Blank'}</Text>
+              <Text style={styles.qzInputValue}>{user?.email || '-'}</Text>
             </View>
           </View>
+
           {/* <Text> {JSON.stringify(this.props.AUTH, null, 4)}</Text> */}
-        </ScrollView>     
+        </ScrollView>
       </View>
-      
     );
   }
 }
@@ -97,7 +91,6 @@ const mapDispatchToProps = dispatch => ({
     persist
       ? dispatch(PActions.setPScreenState(screenName, obj))
       : dispatch(UnpActions.setVScreenState(screenName, obj)),
-  fetchMyProfile: () => dispatch(PActions.fetchMyProfile()),
 });
 
 export default connect(

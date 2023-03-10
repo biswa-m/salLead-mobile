@@ -6,8 +6,12 @@ import {
   TouchableOpacity,
   View,
   Image,
+  KeyboardAvoidingView,
+  ScrollView,
 } from 'react-native';
 import {connect} from 'react-redux';
+import uuid from "react-native-uuid";
+import _ from "lodash";
 
 import AppComponent from '../../Components/RN/AppComponent';
 import styles from '../../Styles/styles';
@@ -19,49 +23,138 @@ import api from '../../Services/Api/api';
 import sleep from '../../Modules/etc/sleep';
 import {initAuth} from '../../Modules/auth/startup';
 import AsyncStorage from '@react-native-community/async-storage';
+import validationModule from '../../Modules/etc/validationModule';
+import authModule from '../../Modules/auth/auth';
 
 class LoginModal extends AppComponent {
-  state = {
+  initialState = {
     loading: null,
     error: null,
-    username: '',
+    name: '',
+    email: '',
     password: '',
+    confirmPassword: '',
     visibleScreen: 'login',
     success: '',
+    currentScreen: 'login',
   };
+
+  state = this.initialState;
 
   async handleLogin() {
     try {
-      this.setAsyncState({loading: true, error: null});
-      const res = await api
-        .post('login?format=json&rememberme=true', {
-          username: this.state.username,
-          password: this.state.password,
-          rememberme: 0,
-          returnTo: '/login',
-          login: 'Login',
-          format: 'json',
-        })
-        .then(x => x.data);
+      let {email, password} = this.state;
+      email = email.toLowerCase();
 
-      console.info(res);
-
-      if (!res.data.loginSuccess) {
-        throw new Error(res.data.loginMessage || 'Login Failed');
+      if (!validationModule.validateEmail(email)) {
+        throw new Error('Please enter a correct email');
       }
-      await AsyncStorage.setItem('auth/user', res.data?.userid?.toString());
-      this.props.setScreenState({user: res.data}, true, 'AUTH');
 
-      this.setAsyncState({loading: false, error: null});
+      this.setAsyncState({loading: true, error: null});
 
-      await sleep(200);
-      initAuth();
-    } catch (error) {
-      this.setAsyncState({error: error.message, loading: null});
+      const existingUser = (
+        await api.request({
+          uri: '/v1/data/get',
+          method: 'POST',
+          body: {
+            filter: {where: {type: 'user', 'data.email': email}, limit: 1},
+          },
+        })
+      ).items?.map(x => ({...(x.data || {}), _id: x._id}))?.[0];
+
+      if (!existingUser) {
+        throw new Error("Your email doesn't exist.");
+      }
+
+      if (password && existingUser.password !== password) {
+        throw new Error('Your password is incorrect.');
+      }
+
+      await authModule.login(existingUser);
+      this.setAsyncState({...this.initialState});
+
+      setTimeout(() => {
+        initAuth();
+      }, 100);
+    } catch (e) {
+      console.log(e);
+      this.setAsyncState({
+        loading: false,
+        error: e.message,
+      });
+    }
+  }
+
+  async handleSignup() {
+    try {
+      let {name: fullName, email, password, confirmPassword} = this.state;
+
+      email = email.toLowerCase();
+
+      if (!validationModule.validateEmail(email)) {
+        throw new Error('Please enter a correct email');
+      }
+
+      if (password !== confirmPassword) {
+        throw new Error('Confirm password does not match');
+      }
+
+      this.setAsyncState({loading: true, error: null});
+
+      const existingUser = (
+        await api.request({
+          uri: '/v1/data/get',
+          method: 'POST',
+          body: {
+            filter: {where: {type: 'user', 'data.email': email}, limit: 1},
+          },
+        })
+      ).items?.map(x => ({...(x.data || {}), _id: x._id}))?.[0];
+
+      if (existingUser) {
+        throw new Error('Your email already exists.');
+      }
+
+      let user = {
+        id: uuid.v4(),
+        fullName,
+        email,
+        password,
+      };
+
+      const apiresult = await api
+        .request({
+          uri: '/v1/data',
+          method: 'POST',
+          body: {
+            type: 'user',
+            data: user,
+          },
+        })
+        .then(x => x.item);
+
+      user = {
+        ...apiresult.data,
+        _id: apiresult._id,
+      };
+
+      await authModule.login(user);
+
+      await this.setAsyncState({...this.initialState});
+
+      setTimeout(() => {
+        initAuth();
+      }, 100);
+    } catch (e) {
+      this.setAsyncState({
+        loading: false,
+        error: e.message,
+      });
     }
   }
 
   closeModal() {
+    this.setAsyncState({...this.initialState});
     this.props.setScreenState({isVisible: false});
   }
 
@@ -73,117 +166,83 @@ class LoginModal extends AppComponent {
       <AppModal
         isVisible={!!isVisible && !isLoggedIn}
         close={this.closeModal.bind(this)}>
-        <View style={[styles.modalWrapper, styles.modalSpaceBetween]}>
+        <View style={[styles.modalWrapper]}>
           <View style={styles.modalHeader}>
-            <Image source={require('../../Assets/img/local/logoGreen.png')} style={styles.qzLogoGreen}/>
-            <TouchableOpacity onPress={this.closeModal.bind(this)} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
-              <Image source={require('../../Assets/img/local/modalClose.png')} style={styles.qzModalClose}/>
+            <Text style={{fontSize: 25, color: 'green'}}>𝕊𝕒𝕝𝕃𝕖𝕒𝕕</Text>
+            <TouchableOpacity
+              onPress={this.closeModal.bind(this)}
+              hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
+              <Image
+                source={require('../../Assets/img/local/modalClose.png')}
+                style={styles.qzModalClose}
+              />
             </TouchableOpacity>
           </View>
 
-          {this.inner()}
+          <KeyboardAvoidingView
+            style={{flex: 1, justifyContent: 'center'}}
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            enabled>
+            {this.renderFooter()}
+            {this.inner()}
+          </KeyboardAvoidingView>
         </View>
       </AppModal>
     );
   }
 
-  renderForgotPass() {
-    const {
-      state: {username, loading, error, success},
-    } = this;
-
-    const disableSubmit = loading || !username;
-
+  renderFooter() {
     return (
-      <React.Fragment>
-        <View style={styles.modalForm}>
-          <View style={styles.modalFormMeta}>
-            <Text style={styles.modalFormSubline}>Forgot Password?</Text>
-            <Text style={styles.modalFormTitle}>Enter your username</Text>
-          </View>
-
-          <View style={styles.modalInputItem}>
-            <Text style={styles.modalInputLabel}>Username</Text>
-            <TextInput
-              hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
-              placeholder="Username"
-              value={username}
-              onChangeText={x => this.setState({username: x})}
-              autoCapitalize="none"
-              style={styles.modalInput}
-            />
-          </View>
-          {error ? <Text style={{color: 'red'}}>{error}</Text> : null}
-          {success ? <Text style={{color: 'green'}}>{success}</Text> : null}
-
-          <TouchableOpacity
-            onPress={() => this.setState({visibleScreen: 'login'})}
-            disabled={loading}
-            style={styles.fgPassWrapper}>
-            <Text style={styles.fgPassText}>
-              Remember Password? Continue to login
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            disabled={disableSubmit}
-            style={[disableSubmit ? styles.greenSubmit : styles.greenSubmit]}>
-            <Text style={styles.greenSubmitText}>
-              {loading ? 'Loading' : 'Submit'}
-            </Text>
-          </TouchableOpacity>
+      <View
+        style={[styles.modalFooterWrapper, {position: 'absolute', bottom: 0}]}>
+        <Text style={styles.modalQzVersion}>SalLead v.1.0.1</Text>
+        <View style={styles.qzModalBanner}>
+          <Image
+            source={require('../../Assets/img/local/banner.png')}
+            style={styles.qzBannerIco}
+          />
+          <Image
+            source={require('../../Assets/img/local/banner.png')}
+            style={styles.qzBannerIco}
+          />
+          <Image
+            source={require('../../Assets/img/local/banner.png')}
+            style={styles.qzBannerIco}
+          />
+          <Image
+            source={require('../../Assets/img/local/banner.png')}
+            style={styles.qzBannerIco}
+          />
+          <Image
+            source={require('../../Assets/img/local/banner.png')}
+            style={styles.qzBannerIco}
+          />
+          <Image
+            source={require('../../Assets/img/local/banner.png')}
+            style={styles.qzBannerIco}
+          />
+          <Image
+            source={require('../../Assets/img/local/banner.png')}
+            style={styles.qzBannerIco}
+          />
+          <Image
+            source={require('../../Assets/img/local/banner.png')}
+            style={styles.qzBannerIco}
+          />
         </View>
-
-        <View style={styles.modalFooterWrapper}>
-          <Text style={styles.modalQzVersion}>Qazzoo v.1.0.1</Text>
-          <View style={styles.qzModalBanner}>
-            <Image
-              source={require('../../Assets/img/local/banner.png')}
-              style={styles.qzBannerIco}
-            />
-            <Image
-              source={require('../../Assets/img/local/banner.png')}
-              style={styles.qzBannerIco}
-            />
-            <Image
-              source={require('../../Assets/img/local/banner.png')}
-              style={styles.qzBannerIco}
-            />
-            <Image
-              source={require('../../Assets/img/local/banner.png')}
-              style={styles.qzBannerIco}
-            />
-            <Image
-              source={require('../../Assets/img/local/banner.png')}
-              style={styles.qzBannerIco}
-            />
-            <Image
-              source={require('../../Assets/img/local/banner.png')}
-              style={styles.qzBannerIco}
-            />
-            <Image
-              source={require('../../Assets/img/local/banner.png')}
-              style={styles.qzBannerIco}
-            />
-            <Image
-              source={require('../../Assets/img/local/banner.png')}
-              style={styles.qzBannerIco}
-            />
-          </View>
-        </View>
-      </React.Fragment>
+      </View>
     );
   }
 
   renderLogin() {
     const {
-      state: {username, password, loading, error},
+      state: {email, password, loading, error},
     } = this;
 
-    const disableSubmit = loading || !username || !password;
+    const disableSubmit = loading || !email || !password;
     return (
       <React.Fragment>
-        <View style={styles.modalForm}>
+        <View style={styles.modalForm} key="login">
           <View style={styles.modalFormMeta}>
             <Text style={styles.modalFormSubline}>Hey there,</Text>
             <Text style={styles.modalFormTitle}>Login</Text>
@@ -191,9 +250,10 @@ class LoginModal extends AppComponent {
           <View style={styles.modalInputItem}>
             <Text style={styles.modalInputLabel}>Login</Text>
             <TextInput
-              placeholder="Username"
-              value={username}
-              onChangeText={x => this.setState({username: x})}
+              placeholder="Email"
+              keyboardType="email-address"
+              value={email}
+              onChangeText={x => this.setState({email: x})}
               autoCapitalize="none"
               style={styles.modalInput}
               hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
@@ -214,58 +274,105 @@ class LoginModal extends AppComponent {
           {error ? <Text style={{color: 'red'}}>{error}</Text> : null}
 
           <TouchableOpacity
-            onPress={() => this.setState({visibleScreen: 'forgotPass'})}
+            onPress={() => this.setState({visibleScreen: 'signup'})}
             disabled={loading}
             style={styles.fgPassWrapper}>
-            <Text style={styles.fgPassText}>Forgot Password?</Text>
+            <Text style={styles.fgPassText}>Do not have account ? Sign up</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={this.handleLogin.bind(this)}
             disabled={disableSubmit}
-            style={[disableSubmit ? styles.greenSubmit : styles.greenSubmit]}>
+            style={[styles.greenSubmit, disableSubmit && {opacity: 0.4}]}>
             <Text style={styles.greenSubmitText}>
               {loading ? 'Loading' : 'Log In'}
             </Text>
           </TouchableOpacity>
         </View>
+      </React.Fragment>
+    );
+  }
 
-        <View style={styles.modalFooterWrapper}>
-          <Text style={styles.modalQzVersion}>Qazzoo v.1.0.1</Text>
-          <View style={styles.qzModalBanner}>
-            <Image
-              source={require('../../Assets/img/local/banner.png')}
-              style={styles.qzBannerIco}
-            />
-            <Image
-              source={require('../../Assets/img/local/banner.png')}
-              style={styles.qzBannerIco}
-            />
-            <Image
-              source={require('../../Assets/img/local/banner.png')}
-              style={styles.qzBannerIco}
-            />
-            <Image
-              source={require('../../Assets/img/local/banner.png')}
-              style={styles.qzBannerIco}
-            />
-            <Image
-              source={require('../../Assets/img/local/banner.png')}
-              style={styles.qzBannerIco}
-            />
-            <Image
-              source={require('../../Assets/img/local/banner.png')}
-              style={styles.qzBannerIco}
-            />
-            <Image
-              source={require('../../Assets/img/local/banner.png')}
-              style={styles.qzBannerIco}
-            />
-            <Image
-              source={require('../../Assets/img/local/banner.png')}
-              style={styles.qzBannerIco}
+  renderSingup() {
+    const {
+      state: {email, password, confirmPassword, name, loading, error},
+    } = this;
+
+    const disableSubmit =
+      loading || !email || !password || !name || !confirmPassword;
+    return (
+      <React.Fragment>
+        <View style={styles.modalForm} key="signup">
+          <View style={styles.modalFormMeta}>
+            <Text style={styles.modalFormSubline}>Hey there,</Text>
+            <Text style={styles.modalFormTitle}>Sign Up</Text>
+          </View>
+          <View style={styles.modalInputItem}>
+            <Text style={styles.modalInputLabel}>Full Name</Text>
+            <TextInput
+              placeholder="Full Name"
+              value={name}
+              onChangeText={x => this.setState({name: x})}
+              autoCapitalize="none"
+              style={styles.modalInput}
+              hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
             />
           </View>
+
+          <View style={styles.modalInputItem}>
+            <Text style={styles.modalInputLabel}>Email</Text>
+            <TextInput
+              placeholder="Email"
+              keyboardType="email-address"
+              value={email}
+              onChangeText={x => this.setState({email: x})}
+              autoCapitalize="none"
+              style={styles.modalInput}
+              hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
+            />
+          </View>
+
+          <View style={styles.modalInputItem}>
+            <Text style={styles.modalInputLabel}>Password</Text>
+            <TextInput
+              placeholder="Password"
+              value={password}
+              onChangeText={x => this.setState({password: x})}
+              secureTextEntry
+              autoCapitalize="none"
+              hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
+            />
+          </View>
+
+          <View style={styles.modalInputItem}>
+            <Text style={styles.modalInputLabel}>Confirm Password</Text>
+            <TextInput
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChangeText={x => this.setState({confirmPassword: x})}
+              secureTextEntry
+              autoCapitalize="none"
+              hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
+            />
+          </View>
+
+          {error ? <Text style={{color: 'red'}}>{error}</Text> : null}
+
+          <TouchableOpacity
+            onPress={() => this.setState({visibleScreen: 'login'})}
+            disabled={loading}
+            style={styles.fgPassWrapper}>
+            <Text style={styles.fgPassText}>Have an account ? Login</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={this.handleSignup.bind(this)}
+            disabled={disableSubmit}
+            style={[styles.greenSubmit, disableSubmit && {opacity: 0.4}]}>
+            <Text style={styles.greenSubmitText}>
+              {loading ? 'Loading' : 'Sign Up'}
+            </Text>
+          </TouchableOpacity>
         </View>
       </React.Fragment>
     );
@@ -273,8 +380,7 @@ class LoginModal extends AppComponent {
 
   inner() {
     if (this.props.isLoggedIn) return null;
-    else if (this.state.visibleScreen === 'forgotPass')
-      return this.renderForgotPass();
+    else if (this.state.visibleScreen === 'signup') return this.renderSingup();
     else return this.renderLogin();
   }
 

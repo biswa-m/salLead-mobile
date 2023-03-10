@@ -5,6 +5,6 @@
  *
  */
 
-export const isLoggedIn = (state) => {
-  return !!state.pState?.AUTH?.user?.userid;
+export const isLoggedIn = state => {
+  return !!state.pState?.AUTH?.user?.id;
 };

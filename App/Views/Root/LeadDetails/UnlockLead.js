@@ -107,7 +107,6 @@ class UnlockLeadInner extends AppComponent {
       this.props.onFail?.(e);
       Alert.alert('Error', e.message);
     }
-    this.props.fetchMyProfile();
   }
 
   async flagLead() {
@@ -115,7 +114,7 @@ class UnlockLeadInner extends AppComponent {
       const res = await api
         .post('leads/report-lead?leadid=' + this.props.item?.leadid + '&format=json', {
           leadid: this.props.item?.leadid,
-          reporter_desc: 'Lead flagged from Qazzoo App.',
+          reporter_desc: 'Lead flagged from SalLead App.',
           // submit: 'Report This Profile'
         })
         .then(x => x.data);
@@ -385,7 +384,6 @@ const mapDispatchToProps = dispatch => ({
     persist
       ? dispatch(PActions.setPScreenState(screenName, obj))
       : dispatch(UnpActions.setVScreenState(screenName, obj)),
-  fetchMyProfile: () => dispatch(PActions.fetchMyProfile()),
 });
 
 const UnlockLeadLeadDetailsScreen = connect(
@@ -428,6 +426,5 @@ export default connect(
       persist
         ? dispatch(PActions.setPScreenState(screenName, obj))
         : dispatch(UnpActions.setVScreenState(screenName, obj)),
-    fetchMyProfile: () => dispatch(PActions.fetchMyProfile()),
   }),
 )(UnlockLead);

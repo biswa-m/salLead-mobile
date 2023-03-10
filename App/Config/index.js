@@ -3,6 +3,7 @@ import envDefault from "../../env/.env.default";
 import envLocal from "../../env/.env.local";
 import envStagging from "../../env/.env.stagging";
 import envProduction from "../../env/.env.production";
+import priorityEnv from "../../env/.env";
 
 const { DEV_MODE } = envConfig;
 const NODE_ENV = __DEV__ ? "dev" : "prod";
@@ -14,17 +15,16 @@ const env = Object.assign(
     ? envProduction
     : DEV_MODE === "stagging"
     ? envStagging
-    : envLocal
+    : envLocal,
+  priorityEnv
 );
 
 const config = {
   NODE_ENV,
   DEV_MODE,
 
-  apiUrl: env.apiUrl,
-
-  initialLocation: { locationid: 1861, city: "Maryland", state: "NY" },
-  //  {locationid: 1853, city: "New York", state: "NY"}
+  apiUrl: env.REACT_APP_API_URL,
+  appname: env.REACT_APP_APP_NAME,
 };
 
 export default config;

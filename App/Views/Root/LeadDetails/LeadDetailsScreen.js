@@ -103,7 +103,6 @@ class LeadDetailsScreen extends AppComponent {
       this.setAsyncState({error: e.message, unlocking: false});
       Alert.alert('Error', e.message);
     }
-    this.props.fetchMyProfile();
   }
 
   onNoteUpdate(data) {
@@ -200,7 +199,6 @@ const mapDispatchToProps = dispatch => ({
     persist
       ? dispatch(PActions.setPScreenState(screenName, obj))
       : dispatch(UnpActions.setVScreenState(screenName, obj)),
-  fetchMyProfile: () => dispatch(PActions.fetchMyProfile()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LeadDetailsScreen);

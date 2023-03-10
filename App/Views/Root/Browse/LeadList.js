@@ -71,12 +71,12 @@ class LeadList extends AppComponent {
         } ${this.props.buyerType || ''}`.trim(),
       };
 
-      console.info({payload, url, location: this.props.location});
+      console.warn({payload, url, location: this.props.location});
 
       const {data} = await api.get(url, payload);
       this.setAsyncState({reloading: false, firstTimeLoad: false});
 
-      // console.warn(data);
+      // console.warn({data});
 
       if (loadId === this.loadId)
         this.props.setScreenState({

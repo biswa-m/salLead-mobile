@@ -1,5 +1,12 @@
 import React from 'react';
-import {Image, ScrollView, Switch, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  ScrollView,
+  Switch,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {connect} from 'react-redux';
 
@@ -7,7 +14,6 @@ import AppComponent from '../../../Components/RN/AppComponent';
 import styles from '../../../Styles/styles';
 import PActions from '../../../Stores/redux/Persisted/Actions';
 import UnpActions from '../../../Stores/redux/Unpersisted/Actions';
-import {logout} from '../../../Modules/auth/logout';
 import {isLoggedIn} from '../../../Stores/redux/Persisted/Selectors';
 import navigationModule from '../../../Modules/navigationModule';
 
@@ -16,12 +22,13 @@ class NotificationSettingsScreen extends AppComponent {
     // if (!this.props.isLoggedIn) {
     //   navigationModule.exec('goBack', [null]);
     // }
-    const {user, account} = this.props.AUTH || {};
+    const {user} = this.props.AUTH || {};
     return (
       <View style={[styles.fill, styles.bgLight]}>
         <View style={styles.qzHeaderMinimal}>
           <SafeAreaView edges={['top']}>
-            <TouchableOpacity hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
+            <TouchableOpacity
+              hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
               style={styles.backUnit}
               onPress={() => navigationModule.exec('goBack', [null])}>
               <Image
@@ -35,29 +42,50 @@ class NotificationSettingsScreen extends AppComponent {
 
         <View style={styles.qzHeaderSpaceLight}>
           <View style={styles.qzProfileAvatar}>
-            <Image source={{uri: account?.profileImageLargeUrl}} style={styles.qzProfileAvatarIco}/>
+            <Image
+              source={
+                user?.photo
+                  ? {uri: user?.photo}
+                  : require('../../../Assets/img/profile/avatar.png')
+              }
+              style={styles.qzProfileAvatarIco}
+            />
           </View>
           <View style={styles.qzProfileAvatarContext}>
-            <Text style={styles.qzProfileAvatarTitleDark}>{user?.userName}</Text>
-            <Text style={styles.qzProfileAvatarSublineDark}>{account?.email}</Text>
+            <Text style={styles.qzProfileAvatarTitleDark}>
+              {user?.fullName}
+            </Text>
+            <Text style={styles.qzProfileAvatarSublineDark}>
+              {user?.email}
+            </Text>
           </View>
         </View>
 
-        <View style={{height:10,width:'100%'}}></View>
-   
+        <View style={{height: 10, width: '100%'}}></View>
+
         <ScrollView style={styles.fill}>
-
-
           <Text style={styles.qzProfileSubtitle}>Notification Settings</Text>
 
           <View style={styles.qzInputGroup}>
-            <View style={[styles.qzInputItem, styles.qzNoBorderBottom, {flexDirection:'row',alignItems:'center',justifyContent:'space-between'}]}>
+            <View
+              style={[
+                styles.qzInputItem,
+                styles.qzNoBorderBottom,
+                {
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                },
+              ]}>
               <Text style={[styles.qzInputLabel]}>Push Notification</Text>
               <Switch
                 value={!!this.props.enablePushNotification}
                 onValueChange={value =>
                   this.props.setScreenState(
-                    {enablePushNotification: !this.props.enablePushNotification},
+                    {
+                      enablePushNotification:
+                        !this.props.enablePushNotification,
+                    },
                     true,
                   )
                 }
@@ -65,15 +93,15 @@ class NotificationSettingsScreen extends AppComponent {
             </View>
           </View>
 
-          
-
-          <Text style={[styles.qzProfileSubtitle, {paddingTop:0,fontWeight:'400'}]}>Manage all notification options and areas in your Qazzoo web dashboard.</Text>
-
-
-          
+          <Text
+            style={[
+              styles.qzProfileSubtitle,
+              {paddingTop: 0, fontWeight: '400'},
+            ]}>
+            Manage all notification options and areas in your SalLead web
+            dashboard.
+          </Text>
         </ScrollView>
-      
-        
       </View>
     );
   }
@@ -91,7 +119,6 @@ const mapDispatchToProps = dispatch => ({
     persist
       ? dispatch(PActions.setPScreenState(screenName, obj))
       : dispatch(UnpActions.setVScreenState(screenName, obj)),
-  fetchMyProfile: () => dispatch(PActions.fetchMyProfile()),
 });
 
 export default connect(

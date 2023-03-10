@@ -6,9 +6,6 @@ const {Types, Creators} = createActions({
 
   setPScreenState: ['screen', 'data'],
 
-  // user-saga
-  fetchMyProfile: null,
-
 });
 
 export const StoreTypes = Types;

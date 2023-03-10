@@ -32,10 +32,10 @@ class HomeScreen extends AppComponent {
               <View style={styles.qzHeaderButtonSmall}>
                 <TouchableOpacity activeOpacity={0.8} onPress={() => navigationModule.exec('navigate', ['/main/profile']) } style={styles.qzHeaderButtonSmall} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                   {
-                    account?.profileImageLargeUrl ? 
-                    <Image source={{uri: account?.profileImageLargeUrl}} style={styles.qzHeaderAvatarIco}/>
+                    account?.photo ? 
+                    <Image source={{uri: account?.photo}} style={styles.qzHeaderAvatarIco}/>
                     :
-                    <Text style={styles.qzUserLoggedText}>{user && user.userName ? user.userName.slice(0, 2).toUpperCase() : 'MY'}</Text>
+                    <Text style={styles.qzUserLoggedText}>{user && user.fullName ? user.fullName.slice(0, 2).toUpperCase() : 'MY'}</Text>
                   }
                 </TouchableOpacity>
               </View>

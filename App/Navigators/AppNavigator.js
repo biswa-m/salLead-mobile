@@ -8,7 +8,6 @@ import navigationModule from '../Modules/navigationModule';
 import HomeScreen from '../Views/Root/Home/HomeScreen';
 import LeadDetailsScreen from '../Views/Root/LeadDetails/LeadDetailsScreen';
 import BrowseScreen from '../Views/Root/Browse/BrowseScreen';
-import {logout} from '../Modules/auth/logout';
 import MyLeadsScreen from '../Views/Root/MyLeads/MyLeadsScreen';
 import AlertsScreen from '../Views/Root/Alerts/AlertsScreen';
 import ProfileScreen from '../Views/Root/Profile/ProfileScreen';

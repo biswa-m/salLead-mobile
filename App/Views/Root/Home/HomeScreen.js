@@ -68,10 +68,9 @@ class HomeScreen extends AppComponent {
                   />
                 </TouchableOpacity>
               </View>
-              <Image
-                source={require('../../../Assets/img/local/logo.png')}
-                style={styles.qzLogo}
-              />
+             
+              <Text style={{fontSize:25, color: 'white', fontWeight: '700'}}>𝕊𝕒𝕝𝕃𝕖𝕒𝕕</Text>
+
               <View style={styles.qzHeaderButtonSmall}>
                 <TouchableOpacity
                  activeOpacity={0.8}
@@ -81,10 +80,10 @@ class HomeScreen extends AppComponent {
                   style={styles.qzHeaderButtonSmall}
                   hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                   {
-                    account?.profileImageLargeUrl ? 
-                    <Image source={{uri: account?.profileImageLargeUrl}} style={styles.qzHeaderAvatarIco}/>
+                    account?.photo ? 
+                    <Image source={{uri: account?.photo}} style={styles.qzHeaderAvatarIco}/>
                     :
-                    <Text style={styles.qzUserLoggedText}>{user && user.userName ? user.userName.slice(0, 2).toUpperCase() : 'MY'}</Text>
+                    <Text style={styles.qzUserLoggedText}>{user && user.fullName ? user.fullName.slice(0, 2).toUpperCase() : 'MY'}</Text>
                   }
                 </TouchableOpacity>
               </View>

@@ -4,23 +4,11 @@ import UnpersistedActions from 'App/Stores/redux/Unpersisted/Actions';
 import {Alert, Platform} from 'react-native';
 import api from '../../Services/Api/api';
 import {store} from '../../store';
+import apiModule from '../api/apiModule';
 import pushNotificationModule from '../pushNotification/push-notification-module';
 
 const onChangeToken = token => {
   console.info('firebase token: ', token);
-  api.get('account/index/appcel-id-submit', {
-    appcelid: `FCM_${Platform.OS}_ENABLE:${token}`,
-    format: 'json',
-  });
-  // api
-  //   .put(
-  //     'v1/user/fcm',
-  //     {token, platform: Platform.OS},
-  //     {
-  //       noRedirect: true,
-  //     },
-  //   )
-  //   .catch((e) => console.warn('error syncing firebase token: ', e));
 };
 
 const onRemoteMessage = async remoteMessage => {
@@ -40,7 +28,7 @@ const saveNotification = async remoteMessage => {
     ? JSON.parse(app_notificaitonsStr)
     : {};
 
-  const userid = (await AsyncStorage.getItem('auth/user')) || 'unknown';
+  const userid = store.getState()?.pState.AUTH?.user?.id;
   const updated = {
     ...app_notificaitons,
     [userid.toString()]: [
@@ -58,7 +46,12 @@ export const initAuth = async () => {
   let state = store?.getState();
 
   if (store) {
-    store.dispatch(PersistedActions.fetchMyProfile());
+    const {user} = await apiModule.fetchMyProfile();
+    store.dispatch(
+      PersistedActions.setPScreenState('AUTH', {
+        user,
+      }),
+    );
   }
 
   pushNotificationModule.init({onChangeToken});

@@ -33,8 +33,8 @@ class AlertsScreen extends AppComponent {
 
   defaultNotif = {
     notification: {
-      title: 'Hello Qazzoo',
-      body: 'Welcome to Qazzoo. On this screen you can view alerts for your account!',
+      title: 'Hello SalLead',
+      body: 'Welcome to SalLead. On this screen you can view alerts for your account!',
     },
   };
 
@@ -93,10 +93,10 @@ class AlertsScreen extends AppComponent {
                   style={styles.qzHeaderButtonSmall}
                   hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                   {
-                    account?.profileImageLargeUrl ? 
-                    <Image source={{uri: account?.profileImageLargeUrl}} style={styles.qzHeaderAvatarIco}/>
+                    account?.photo ? 
+                    <Image source={{uri: account?.photo}} style={styles.qzHeaderAvatarIco}/>
                     :
-                    <Text style={styles.qzUserLoggedText}>{user && user.userName ? user.userName.slice(0, 2).toUpperCase() : 'MY'}</Text>
+                    <Text style={styles.qzUserLoggedText}>{user && user.fullName ? user.fullName.slice(0, 2).toUpperCase() : 'MY'}</Text>
                   }
                 </TouchableOpacity>
               </View>

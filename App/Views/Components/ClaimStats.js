@@ -42,7 +42,7 @@ class ClaimStats extends AppComponent {
 
 const SCREEN_NAME = 'APP_DATA';
 const mapStateToProps = state => ({
-  claimStats: state.pState['AUTH']?.account.claimStats,
+  claimStats: state.pState['AUTH']?.account?.claimStats,
   isLoggedIn: isLoggedIn(state),
 });
 
