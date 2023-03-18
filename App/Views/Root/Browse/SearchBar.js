@@ -107,7 +107,7 @@ class SearchBar extends AppComponent {
     return (
       <TouchableOpacity
         style={styles.suggestChildWrapper}
-        key={item.locationid || item.statename}
+        key={item.locationid || item.state}
         onPress={() => this.searchLocation({item, group})}>
         <View style={styles.suggestDecor}>
           <View style={styles.suggestDecorInner}></View>
@@ -118,7 +118,7 @@ class SearchBar extends AppComponent {
             : group === 'county'
             ? `${item.county || ''}, ${item.state || ''}`
             : group === 'state'
-            ? `${item.statename || ''}`
+            ? `${item.state || ''}`
             : ''
         }`}</Text>
       </TouchableOpacity>
@@ -290,7 +290,7 @@ class SearchBar extends AppComponent {
             <Text>{`${
               this.props.location?.city ||
               this.props.location?.county ||
-              this.props.location?.statename
+              this.props.location?.state
             }${
               this.props.location?.state ? `, ${this.props.location.state}` : ''
             }`}</Text>

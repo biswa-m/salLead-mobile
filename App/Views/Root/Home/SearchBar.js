@@ -5,7 +5,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Image
+  Image,
 } from 'react-native';
 import {connect} from 'react-redux';
 import SearchInput from '../../../Components/Input/SearchInput';
@@ -16,6 +16,7 @@ import PActions from '../../../Stores/redux/Persisted/Actions';
 import UnpActions from '../../../Stores/redux/Unpersisted/Actions';
 import api from '../../../Services/Api/api';
 import navigationModule from '../../../Modules/navigationModule';
+import leadModule from '../../../Modules/lead/leadModule';
 
 const {height: HEIGHT} = Dimensions.get('window');
 const {width} = Dimensions.get('window');
@@ -30,14 +31,12 @@ class SearchBar extends AppComponent {
       this.props.setScreenState({keyword: q});
       if (!q) {
         this.props.setScreenState({searchSuggestions: null});
-      } else if (q.length >= 3) {
-        const {
-          data: {AjaxSearchCompleteRowSet},
-        } = await api.get('index/ajxsrch', {s: q});
+      } else {
+        const locations = await leadModule.searchLocation(q);
 
         if (this.searchId === searchId)
           this.props.setScreenState({
-            searchSuggestions: AjaxSearchCompleteRowSet,
+            searchSuggestions: locations,
           });
       }
     } catch (e) {
@@ -71,7 +70,7 @@ class SearchBar extends AppComponent {
     }
   }
 
-  searchLeadsFromKeyword(keyword){
+  searchLeadsFromKeyword(keyword) {
     this.props.setScreenState(
       {
         location: null,
@@ -93,20 +92,12 @@ class SearchBar extends AppComponent {
     return (
       <TouchableOpacity
         style={styles.suggestChildWrapper}
-        key={item.locationid || item.statename}
+        key={item.address}
         onPress={() => this.searchLeadsFromLocation({item, group})}>
         <View style={styles.suggestDecor}>
           <View style={styles.suggestDecorInner}></View>
         </View>
-        <Text style={styles.suggestChild}>{`${
-          group === 'strongcity'
-            ? `${item.city || ''}, ${item.state || ''}`
-            : group === 'county'
-            ? `${item.county || ''}, ${item.state || ''}`
-            : group === 'state'
-            ? `${item.statename || ''}`
-            : ''
-        }`}</Text>
+        <Text style={styles.suggestChild}>{item.address}</Text>
       </TouchableOpacity>
     );
   }
@@ -118,7 +109,7 @@ class SearchBar extends AppComponent {
 
     const searchSuggestionList = (
       <View style={[styles.suggestWrapper, {}]}>
-        <View style={{width:'100%',height:15,}}></View>
+        <View style={{width: '100%', height: 15}}></View>
         {searchSuggestions?.strongcity?.length ? (
           <View style={styles.suggestSection}>
             <View style={[styles.suggestTitleWrapper]}>
@@ -158,32 +149,62 @@ class SearchBar extends AppComponent {
           <TouchableOpacity
             hitSlop={{top: 20, bottom: 20, left: 20, right: 10}}
             onPress={() => this.handleSearchTypeChange('daily')}
-            style={[{width:80,height:27,alignItems:'center',justifyContent:'center',borderRadius:6,marginRight:15,}, this.props.searchType === 'daily' ? {backgroundColor:'#20A40D'} : {backgroundColor:'#d5eed1'}]}>
+            style={[
+              {
+                width: 80,
+                height: 27,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 6,
+                marginRight: 15,
+              },
+              this.props.searchType === 'daily'
+                ? {backgroundColor: '#20A40D'}
+                : {backgroundColor: '#d5eed1'},
+            ]}>
             <Text
               style={[
-                {fontWeight: '500',fontSize:10,},
-                this.props.searchType === 'daily' ? {color:'#FFFFFF'} : {color:'#20A40D'},
+                {fontWeight: '500', fontSize: 10},
+                this.props.searchType === 'daily'
+                  ? {color: '#FFFFFF'}
+                  : {color: '#20A40D'},
               ]}>
               Daily
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-          hitSlop={{top: 20, bottom: 20, left: 10, right: 20}}
+            hitSlop={{top: 20, bottom: 20, left: 10, right: 20}}
             onPress={() => this.handleSearchTypeChange('legacy')}
-            style={[{width:80,height:27,alignItems:'center',justifyContent:'center',borderRadius:6,}, this.props.searchType === 'legacy' ? {backgroundColor:'#20A40D'} : {backgroundColor:'#d5eed1'}]}>
+            style={[
+              {
+                width: 80,
+                height: 27,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 6,
+              },
+              this.props.searchType === 'legacy'
+                ? {backgroundColor: '#20A40D'}
+                : {backgroundColor: '#d5eed1'},
+            ]}>
             <Text
               style={[
-                {fontWeight: '500',fontSize:10,},
-                this.props.searchType === 'legacy' ? {color:'#FFFFFF'} : {color:'#20A40D'},
+                {fontWeight: '500', fontSize: 10},
+                this.props.searchType === 'legacy'
+                  ? {color: '#FFFFFF'}
+                  : {color: '#20A40D'},
               ]}>
               Legacy
             </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.searchInputContainer}>
-          <Image source={require('../../../Assets/img/local/search.png')} style={styles.qzInputIco}/>
+          <Image
+            source={require('../../../Assets/img/local/search.png')}
+            style={styles.qzInputIco}
+          />
           <SearchInput
-            placeholderTextColor='#A0B2C8'
+            placeholderTextColor="#A0B2C8"
             onChangeText={this.handleSearch.bind(this)}
             placeholder="Search Here"
             onSubmitEditing={this.searchLeadsFromKeyword.bind(this)}
@@ -197,17 +218,17 @@ class SearchBar extends AppComponent {
           <View
             style={{
               position: 'absolute',
-              marginHorizontal:-20,
-              width:width-40,
+              marginHorizontal: -20,
+              width: width - 40,
               maxHeight: HEIGHT / 2,
-              marginTop:93,
-              backgroundColor:'#FFFFFF',
+              marginTop: 93,
+              backgroundColor: '#FFFFFF',
               shadowColor: '#000000',
               shadowOffset: {width: 0, height: 3},
               shadowOpacity: 0.16,
               shadowRadius: 4,
-              borderBottomLeftRadius:10,
-              borderBottomRightRadius:10,
+              borderBottomLeftRadius: 10,
+              borderBottomRightRadius: 10,
             }}>
             <ScrollView>{searchSuggestionList}</ScrollView>
           </View>

@@ -16,6 +16,7 @@ import styles from '../../Styles/styles';
 import UnlockLead from '../Root/LeadDetails/UnlockLead';
 import AsyncStorage from '@react-native-community/async-storage';
 import api from '../../Services/Api/api';
+import {DateTime} from 'luxon';
 
 class LeadRow extends PureAppComponent {
   state = {
@@ -32,12 +33,12 @@ class LeadRow extends PureAppComponent {
   async makeNote() {
     try {
       this.setAsyncState({loading: true, error: null});
-      const res = await api
-        .post('real-estate-lead-detail/qazzoo-homebuyer/' + this.state.leadid, {
-          lead_notes: this.state.noteText,
-          format: 'json',
-        })
-        .then(x => x.data);
+      // const res = await api
+      //   .post('real-estate-lead-detail/qazzoo-homebuyer/' + this.state.leadid, {
+      //     lead_notes: this.state.noteText,
+      //     format: 'json',
+      //   })
+      //   .then(x => x.data);
 
       console.info(res);
 
@@ -78,42 +79,52 @@ class LeadRow extends PureAppComponent {
     }
   }
 
+  getDescription(item) {
+    let address = `${item.city ? item.city + ', ' : ''}${item.state || ''}`;
+    let lookingAtAddress = `${
+      item.lookingAtCity ? item.lookingAtCity + ', ' : ''
+    }${item.lookingAtState || ''}`;
+    let description =
+      item.consumerType === 'Home Buyer'
+        ? `I am Home Buyer from ${address} and I am looking to buy a home in ${lookingAtAddress}. I'm looking for a home for ${
+            item.minBudget
+              ? `$${item.minBudget?.toLocaleString()}-$${item.budget?.toLocaleString()}`
+              : `less than $${item.budget?.toLocaleString()}`
+          } with a possible down payment of $${item.financing?.toLocaleString()}+. I have ${
+            item.creditHistory
+          } credit with a household income of $${item.income?.toLocaleString()}K+`
+        : `I have a potential listing in ${address} and I am looking to buy a home in ${lookingAtAddress}. I'm looking for a home for ${
+            item.minBudget
+              ? `$${item.minBudget?.toLocaleString()}-$${item.budget?.toLocaleString()}`
+              : `less than $${item.budget?.toLocaleString()}`
+          } with a possible down payment of $${item.financing?.toLocaleString()}. I have ${
+            item.creditHistory
+          } credit with a household income of $${item.income?.toLocaleString()}K+`;
+    description = this.props.descriptionTextLim
+      ? description.substr(0, this.props.descriptionTextLim) +
+        (description.length > this.props.descriptionTextLim ? '...' : '')
+      : description;
+
+    return description;
+  }
+
   render() {
     const {
-      props: {item, descriptionTextLim, lead, browse, detail, index, addStyle},
+      props: {item, index, style, styles: propStyles = {}},
     } = this;
 
-    var matches = item.topName
-      ? item.topName.match(/\b(\w)/g)
-      : item.fullname
-      ? item.fullname.match(/\b(\w)/g)
-      : ['A', 'S']; // ['J','S','O','N']
-    var acronym = matches.join(''); // JSON
+    var matches = item.name?.match(/\b(\w)/g) || ['A', 'S'];
+    var acronym = matches.join('');
 
     const avatarColor = avatarColors[(index || 0) % avatarColors.length];
 
-    const leadUnlocked = item?.sharesUserOwns > 0 || lead?.currentUserOwnsLead;
+    const leadUnlocked = false;
     const lockIcon = require('../../Assets/img/leads/unlockLight.png');
 
-    this.setAsyncState({leadid: item.leadid});
-
-    console.log(item);
-    console.log('Check above ITEM');
-    console.log(item.age);
-
-    var ageNumber = item.age?.match(/\d+/)[0]; // "3"
-
-    console.log(ageNumber);
-
-    var dayChecker = item.age?.includes('days ago');
-    console.log(dayChecker, ': contains days ago?');
-
-    console.log(item.isLegacy, ': is it legacy?');
-
-    console.log(addStyle,'Check above LEAD');
+    const description = this.getDescription(item);
 
     return (
-      <View style={ageNumber == 119 && addStyle ? styles.pink : addStyle ? styles.browseLeadsList : styles.none}>
+      <View style={style}>
         {this.props.detail ? (
           <View style={styles.leadContainer}>
             <View style={styles.leadTopDetail}>
@@ -136,12 +147,11 @@ class LeadRow extends PureAppComponent {
                 <Text style={styles.leadTopLocationDetail}>Home Buyer</Text>
               </View>
             </View>
-            {
-              lead?.description || item?.description ?
-            <View style={styles.leadContextContainerDetail}>
-              <Text style={styles.leadContextLabelDetail}>Description</Text>
-              <Text style={styles.leadContextDetail}>
-                {/* {descriptionTextLim &&
+            {lead?.description || item?.description ? (
+              <View style={styles.leadContextContainerDetail}>
+                <Text style={styles.leadContextLabelDetail}>Description</Text>
+                <Text style={styles.leadContextDetail}>
+                  {/* {descriptionTextLim &&
                 (lead?.description || item.description)?.length >
                   descriptionTextLim
                   ? (lead?.description || item.description).substr(
@@ -149,10 +159,12 @@ class LeadRow extends PureAppComponent {
                       descriptionTextLim,
                     ) + '...'
                   : lead?.description || item.description} */}
-                {lead?.description || item?.description}
-              </Text>
-            </View> : <View style={{height:20,width:'100%',}}></View>
-            }
+                  {lead?.description || item?.description}
+                </Text>
+              </View>
+            ) : (
+              <View style={{height: 20, width: '100%'}}></View>
+            )}
 
             {leadUnlocked && !lead?.notes && !this.state.editView ? (
               <TouchableOpacity
@@ -233,26 +245,16 @@ class LeadRow extends PureAppComponent {
                   <Text
                     style={[styles.leadTopName, {flex: 1}]}
                     numberOfLines={1}>
-                    {item.topName || item.fullname}
+                    {item.name}
                   </Text>
 
-                  {this.props.browse ? (
-                    <View style={styles.orangeCapsule}>
-                      <Text style={styles.orangeCapsuleLabel}>
-                        {item.age.replace(/about /g, '')}
-                      </Text>
-                    </View>
-                  ) : (
-                    <View
-                      style={[
-                        styles.orangeCapsule,
-                        {marginTop: -6, marginRight: -4},
-                      ]}>
-                      <Text style={styles.orangeCapsuleLabel}>
-                        {item.age.replace(/about /g, '')}
-                      </Text>
-                    </View>
-                  )}
+                  <View style={[styles.orangeCapsule, propStyles.relativeTime]}>
+                    <Text style={styles.orangeCapsuleLabel}>
+                      {DateTime.fromMillis(
+                        parseInt(item.ts || 0),
+                      ).toRelativeCalendar()}
+                    </Text>
+                  </View>
                 </View>
                 <View
                   style={[
@@ -266,36 +268,14 @@ class LeadRow extends PureAppComponent {
                   <Text
                     style={[styles.leadTopLocation, {flex: 1}]}
                     numberOfLines={1}>
-                    {item.topLocation || item.location}
+                    {item.city ? item.city + ', ' : ''}
+                    {item.stateAbbrev || ''}
                   </Text>
                 </View>
               </View>
             </View>
-            {this.props.browse ? (
-              <Text style={styles.leadContextIndented}>
-                {/* {descriptionTextLim &&
-                (lead?.description || item.description)?.length >
-                  descriptionTextLim
-                  ? (lead?.description || item.description).substr(
-                      0,
-                      descriptionTextLim,
-                    ) + '...'
-                  : lead?.description || item.description} */}
-                {item?.description}
-              </Text>
-            ) : (
-              <Text style={styles.leadContext}>
-                {/* {descriptionTextLim &&
-                (lead?.description || item.description)?.length >
-                  descriptionTextLim
-                  ? (lead?.description || item.description).substr(
-                      0,
-                      descriptionTextLim,
-                    ) + '...'
-                  : lead?.description || item.description} */}
-                {item?.description}
-              </Text>
-            )}
+
+            <Text style={styles.leadContext}>{description}</Text>
           </View>
         )}
 

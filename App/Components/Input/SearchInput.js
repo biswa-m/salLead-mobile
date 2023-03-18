@@ -22,8 +22,6 @@ class SearchInput extends AppComponent {
     const {
       state: {q},
     } = this;
-    console.log('Find Right Below')
-    console.log(this.props);
 
     return (
       <View style={styles.searchInputWrapperify}>

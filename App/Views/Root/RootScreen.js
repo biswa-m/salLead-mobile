@@ -7,6 +7,9 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import LoginModal from '../Components/LoginModal';
 import {initAuth, startup} from '../../Modules/auth/startup';
 import {isLoggedIn} from '../../Stores/redux/Persisted/Selectors';
+import apiModule from '../../Modules/api/apiModule';
+import PActions from '../../Stores/redux/Persisted/Actions';
+import UnpActions from '../../Stores/redux/Unpersisted/Actions';
 
 class RootScreen extends Component {
   componentDidMount() {
@@ -20,6 +23,10 @@ class RootScreen extends Component {
     if (this.props.isLoggedIn) {
       initAuth().catch(console.warn);
     }
+
+    apiModule
+      .loadLeads()
+      .then(leads => this.props.setScreenState({leads}, true));
   }
 
   render() {
@@ -32,10 +39,15 @@ class RootScreen extends Component {
   }
 }
 
+const SCREEN_NAME = 'APP_DATA';
 const mapStateToProps = state => ({
   isLoggedIn: isLoggedIn(state),
 });
-
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  setScreenState: (obj, persist = false, screenName = SCREEN_NAME) =>
+    persist
+      ? dispatch(PActions.setPScreenState(screenName, obj))
+      : dispatch(UnpActions.setVScreenState(screenName, obj)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(RootScreen);

@@ -63,8 +63,8 @@ class LeadList extends AppComponent {
         location:
           this.props.location?.locationid || opt?.defaultFilter?.location || '',
         keywords: `${this.props.keyword || ''} ${
-          this.props.location?.statename && !this.props.location?.locationid
-            ? this.props.location?.statename
+          this.props.location?.state && !this.props.location?.locationid
+            ? this.props.location?.state
             : ''
         } ${this.props.creditHistory || ''} ${
           this.props.financing ? `financing ${this.props.financing}` : ''
@@ -170,15 +170,17 @@ class LeadList extends AppComponent {
   renderItem(props) {
     return (
       <TouchableOpacity
-        
         key={props.item?.leadid?.toString() + props.index?.toString()}
         onPress={() => this.goToLeadDetails(props)}>
         <LeadRow
           {...props}
-          addStyle={true}
-          descriptionTextLim={90}
-          browse={this.props.browse}
+          style={styles.browseLeadsList}
+          browse
           updateItem={this.updateItem.bind(this)}
+          styles={{
+            relativeTime: {marginTop: -6, marginRight: -4},
+            leadContext: styles.leadContextIndented,
+          }}
         />
       </TouchableOpacity>
     );

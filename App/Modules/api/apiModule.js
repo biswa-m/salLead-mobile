@@ -16,6 +16,18 @@ const apiModule = {
     ).items?.map(x => ({...(x.data || {}), _id: x._id}))?.[0];
     return {user};
   },
+
+  loadLeads: () => {
+    return api
+      .request({
+        uri: '/v1/data/get',
+        method: 'POST',
+        body: {
+          filter: {where: {type: 'lead'}},
+        },
+      })
+      .then(res => res?.items?.map(x => ({...(x.data || {}), _id: x._id})));
+  },
 };
 
 export default apiModule;

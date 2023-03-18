@@ -27,24 +27,17 @@ class LeadList extends AppComponent {
   async load() {
     try {
       this.setAsyncState({error: null, loading: true});
-      const url =
-        this.props.searchType === 'legacy'
-          ? '/legacy-leads'
-          : '/real-estate-lead';
+      const {searchType, leads} = this.props;
 
-      const {data} = await api.get(url, {
-        page: 1,
-        format: 'json',
-        location:
-          this.props.lastSearchDetails?.location ||
-          config.initialLocation?.locationid,
-      });
-
-      this.setAsyncState({loading: false});
-      this.props.setScreenState(
-        {['leadData_' + this.props.searchType]: data?.data},
-        true,
+      let count = 0;
+      const searchResult = leads?.filter(
+        x =>
+          count < 10 &&
+          (searchType === 'legacy' ? x.isLegacy : !x.isLegacy) &&
+          count++,
       );
+
+      this.setAsyncState({loading: false, searchResult});
     } catch (error) {
       this.setAsyncState({error: error.message});
     }
@@ -65,7 +58,12 @@ class LeadList extends AppComponent {
         key={props.item?.leadid?.toString() + props.index?.toString()}
         onPress={() => this.goToLeadDetails(props)}
         style={styles.homeLeadsList}>
-        <LeadRow {...props} descriptionTextLim={90}/>
+        <LeadRow
+          {...props}
+          styles={{
+            relativeTime: {marginTop: -6, marginRight: -4},
+          }}
+        />
       </TouchableOpacity>
     );
   }
@@ -73,8 +71,8 @@ class LeadList extends AppComponent {
   render() {
     return (
       <>
-        {this.props['leadData_' + this.props.searchType]?.leads?.map(
-          (item, index) => this.renderItem({item, index}),
+        {this.state.searchResult?.map((item, index) =>
+          this.renderItem({item, index}),
         )}
         {/* <FlatList
           style={styles.fill}
@@ -89,6 +87,7 @@ class LeadList extends AppComponent {
 
 const SCREEN_NAME = 'HOME_SCREEN';
 const mapStateToProps = state => ({
+  leads: state.pState['APP_DATA']?.leads,
   leadData_daily: state.pState[SCREEN_NAME]?.leadData_daily,
   leadData_legacy: state.pState[SCREEN_NAME]?.leadData_legacy,
   // searchType: state.vState[SCREEN_NAME]?.searchType,
