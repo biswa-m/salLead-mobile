@@ -24,10 +24,8 @@ class LeadList extends AppComponent {
   state = {loading: false, reloading: false, error: null, firstTimeLoad: true};
 
   componentDidMount() {
-    console.log(this.props);
-    console.log('Props above');
     this.onMount();
-    this.props.setScreenState({leadData: this.props.homeScreen_leadData_daily});
+    this.load();
     // if (this.props.location || this.props.keyword) this.load();
     // else
     //   this.load({
@@ -41,7 +39,9 @@ class LeadList extends AppComponent {
 
   componentDidUpdate(prevProps) {
     if (prevProps.reloadSearch != this.props.reloadSearch) {
-      this.load();
+      setTimeout(() => {
+        this.load();
+      }, 50);
     }
   }
 
@@ -50,42 +50,67 @@ class LeadList extends AppComponent {
     try {
       const loadId = this.loadId + 1;
       this.loadId = loadId;
-      this.setAsyncState({error: null, reloading: true});
-      const url =
-        this.props.searchType === 'legacy'
-          ? '/legacy-leads'
-          : '/real-estate-lead';
+      await this.setAsyncState({error: null, reloading: true});
 
-      const payload = {
-        ...(opt?.defaultFilter || {}),
-        p: 1,
-        format: 'json',
-        location:
-          this.props.location?.locationid || opt?.defaultFilter?.location || '',
-        keywords: `${this.props.keyword || ''} ${
-          this.props.location?.state && !this.props.location?.locationid
-            ? this.props.location?.state
-            : ''
-        } ${this.props.creditHistory || ''} ${
-          this.props.financing ? `financing ${this.props.financing}` : ''
-        } ${this.props.buyerType || ''}`.trim(),
+      const {
+        searchType,
+        leads,
+        location,
+        keyword,
+        creditHistory,
+        financing,
+        buyerType,
+      } = this.props;
+      const lastSearchDetails = {
+        searchType,
+        location,
+        keyword,
+        creditHistory,
+        financing,
+        buyerType,
       };
+      let count = 0;
 
-      console.warn({payload, url, location: this.props.location});
+      console.warn(lastSearchDetails);
+      const keywordRegex = keyword && new RegExp(`.*${keyword}.*`, 'i');
+      const financingFilter = financing
+        ? financing.split(',').map(x => parseFloat(x))
+        : [];
 
-      const {data} = await api.get(url, payload);
-      this.setAsyncState({reloading: false, firstTimeLoad: false});
+      const result = leads?.filter(x => {
+        return (
+          (searchType === 'legacy' ? x.isLegacy : !x.isLegacy) &&
+          (location
+            ? ((!location.city || x.city == location.city) &&
+                x.state == location.state) ||
+              ((!location.city || x.lookingAtCity == location.city) &&
+                x.lookingAtState == location.state)
+            : 1) &&
+          (keyword
+            ? keywordRegex.test(x.name) ||
+              keywordRegex.test(x.city) ||
+              keywordRegex.test(x.state)
+            : 1) &&
+          (creditHistory ? x.creditHistory == creditHistory : 1) &&
+          (financing
+            ? (financingFilter[0] || 0) <= parseFloat(x.financing) &&
+              (financingFilter[1] || Infinity) > parseFloat(x.financing)
+            : 1) &&
+          (buyerType ? x.consumerType == buyerType : 1) &&
+          count++
+        );
+      });
 
-      // console.warn({data});
+      await this.setAsyncState({reloading: false, firstTimeLoad: false});
 
       if (loadId === this.loadId)
         this.props.setScreenState({
-          leadData: data?.data,
+          leadData: {leads: result},
           page: 1,
         });
       this.props.setScreenState(
         {
-          lastSearchDetails: payload,
+          lastSearchDetails,
         },
         true,
       );
@@ -97,6 +122,7 @@ class LeadList extends AppComponent {
 
   async loadMore() {
     try {
+      return;
       if (
         this.state.reloading ||
         this.state.loading ||
@@ -215,6 +241,8 @@ class LeadList extends AppComponent {
               <ActivityIndicator size={'large'} />
             ) : null;
           }}
+          initialNumToRender={20}
+          maxToRenderPerBatch={10}
         />
       </>
     );
@@ -223,6 +251,7 @@ class LeadList extends AppComponent {
 
 const SCREEN_NAME = 'BROWSE_SCREEN';
 const mapStateToProps = state => ({
+  leads: state.pState['APP_DATA']?.leads,
   leadData: state.vState[SCREEN_NAME]?.leadData,
   page: state.vState[SCREEN_NAME]?.page,
   searchType: state.vState[SCREEN_NAME]?.searchType,

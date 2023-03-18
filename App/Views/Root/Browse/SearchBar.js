@@ -17,41 +17,46 @@ import styles from '../../../Styles/styles';
 import PActions from '../../../Stores/redux/Persisted/Actions';
 import UnpActions from '../../../Stores/redux/Unpersisted/Actions';
 import api from '../../../Services/Api/api';
+import leadModule from '../../../Modules/lead/leadModule';
 
 const {height: HEIGHT} = Dimensions.get('window');
 class SearchBar extends AppComponent {
   buyerTypeOptions = [
-    {value: '', label: 'Any Buyer'},
+    {value: 'Home Buyer', label: 'Any Buyer'},
     {value: 'Home Owner', label: 'Potential Listings'},
   ];
 
   creditHistoryOptions = [
     {value: '', label: 'Credit History'},
-    {value: 'excellent credit', label: 'Excellent Credit'},
-    {value: 'fair credit', label: 'Fair Credit'},
-    {value: 'good credit', label: 'Good Credit'},
-    {value: 'bad credit', label: 'Bad Credit'},
+    {value: 'excellent', label: 'Excellent Credit'},
+    {value: 'fair', label: 'Fair Credit'},
+    {value: 'good', label: 'Good Credit'},
+    {value: 'bad', label: 'Bad Credit'},
   ];
 
   financingOptions = [
     {value: '', label: 'All Financing'},
-    {value: '$200,000 or less', label: 'Less Than $200,000'},
-    {value: '$250,000', label: '$250,000'},
-    {value: '$300,000', label: '$300,000'},
-    {value: '$350,000', label: '$350,000'},
-    {value: '$400,000', label: '$400,000'},
-    {value: '$450,000', label: '$450,000'},
-    {value: '$500,000', label: '$500,000'},
-    {value: '$550,000', label: '$550,000'},
-    {value: '$600,000', label: '$600,000'},
-    {value: '$650,000', label: '$650,000'},
-    {value: '$700,000', label: '$700,000'},
-    {value: '$750,000', label: '$750,000'},
-    {value: '$800,000', label: '$800,000'},
-    {value: '$850,000', label: '$850,000'},
-    {value: '$900,000', label: '$900,000'},
-    {value: '$950,000', label: '$950,000'},
-    {value: '$1,000,000 +', label: 'More Than $1,000,000'},
+    {value: '0,200000', label: 'Less Than $200,000', miniLabel: '$200,000'},
+    {value: '200000,250000', label: '$250,000', miniLabel: '$250,000'},
+    {value: '250000,300000', label: '$300,000', miniLabel: '$300,000'},
+    {value: '300000,350000', label: '$350,000', miniLabel: '$350,000'},
+    {value: '350000,400000', label: '$400,000', miniLabel: '$400,000'},
+    {value: '400000,450000', label: '$450,000', miniLabel: '$450,000'},
+    {value: '450000,500000', label: '$500,000', miniLabel: '$500,000'},
+    {value: '500000,550000', label: '$550,000', miniLabel: '$550,000'},
+    {value: '550000,600000', label: '$600,000', miniLabel: '$600,000'},
+    {value: '600000,650000', label: '$650,000', miniLabel: '$650,000'},
+    {value: '650000,700000', label: '$700,000', miniLabel: '$700,000'},
+    {value: '700000,750000', label: '$750,000', miniLabel: '$750,000'},
+    {value: '750000,800000', label: '$800,000', miniLabel: '$800,000'},
+    {value: '800000,850000', label: '$850,000', miniLabel: '$850,000'},
+    {value: '850000,900000', label: '$900,000', miniLabel: '$900,000'},
+    {value: '900000,950000', label: '$950,000', miniLabel: '$950,000'},
+    {
+      value: '1000000,0',
+      label: 'More Than $1,000,000',
+      miniLabel: '$1,000,000',
+    },
   ];
 
   searchId = 0;
@@ -64,14 +69,12 @@ class SearchBar extends AppComponent {
 
       if (!q) {
         this.props.setScreenState({searchSuggestions: null});
-      } else if (q.length >= 3) {
-        const {
-          data: {AjaxSearchCompleteRowSet},
-        } = await api.get('index/ajxsrch', {s: q});
+      } else {
+        const locations = await leadModule.searchLocation(q);
 
         if (this.searchId === searchId)
           this.props.setScreenState({
-            searchSuggestions: AjaxSearchCompleteRowSet,
+            searchSuggestions: locations,
           });
       }
     } catch (e) {
@@ -107,20 +110,12 @@ class SearchBar extends AppComponent {
     return (
       <TouchableOpacity
         style={styles.suggestChildWrapper}
-        key={item.locationid || item.state}
+        key={item.address}
         onPress={() => this.searchLocation({item, group})}>
         <View style={styles.suggestDecor}>
           <View style={styles.suggestDecorInner}></View>
         </View>
-        <Text style={styles.suggestChild}>{`${
-          group === 'strongcity'
-            ? `${item.city || ''}, ${item.state || ''}`
-            : group === 'county'
-            ? `${item.county || ''}, ${item.state || ''}`
-            : group === 'state'
-            ? `${item.state || ''}`
-            : ''
-        }`}</Text>
+        <Text style={styles.suggestChild}>{item.address}</Text>
       </TouchableOpacity>
     );
   }
@@ -132,7 +127,7 @@ class SearchBar extends AppComponent {
 
     const searchSuggestionList = (
       <View style={styles.suggestWrapper}>
-        <View style={{width:'100%',height:15,}}></View>
+        <View style={{width: '100%', height: 15}}></View>
         {searchSuggestions?.strongcity?.length ? (
           <View style={styles.suggestSection}>
             <View style={[styles.suggestTitleWrapper]}>
@@ -247,7 +242,11 @@ class SearchBar extends AppComponent {
             items={this.financingOptions}>
             <View style={styles.qzSelect}>
               <Text style={styles.qzSelectLabel} numberOfLines={1}>
-                {this.props.financing ? this.props.financing : 'All Financing'}
+                {this.props.financing
+                  ? this.financingOptions.find(
+                      x => x.value == this.props.financing,
+                    )?.miniLabel
+                  : 'All Financing'}
               </Text>
               <Image
                 source={require('../../../Assets/img/local/chevron.png')}
@@ -273,7 +272,7 @@ class SearchBar extends AppComponent {
               <Text style={styles.qzSelectLabel} numberOfLines={1}>
                 {this.buyerTypeOptions?.find(
                   x => x.value == this.props.buyerType,
-                )?.label || 'Any Buyer'}
+                )?.label || 'Select'}
               </Text>
               <Image
                 source={require('../../../Assets/img/local/chevron.png')}
@@ -284,16 +283,11 @@ class SearchBar extends AppComponent {
         </View>
 
         {this.props.location ? (
-          <View style={{flexDirection:'row',paddingLeft:20,paddingBottom:20,}}>
-            <Text style={{color:'#d5eed1',}}>
-            <Text>Location: </Text>
-            <Text>{`${
-              this.props.location?.city ||
-              this.props.location?.county ||
-              this.props.location?.state
-            }${
-              this.props.location?.state ? `, ${this.props.location.state}` : ''
-            }`}</Text>
+          <View
+            style={{flexDirection: 'row', paddingLeft: 20, paddingBottom: 20}}>
+            <Text style={{color: '#d5eed1'}}>
+              <Text>Location: </Text>
+              <Text>{this.props.location?.address}</Text>
             </Text>
           </View>
         ) : null}
@@ -304,9 +298,9 @@ class SearchBar extends AppComponent {
               position: 'absolute',
               backgroundColor: '#FFF',
               width: '100%',
-              height:HEIGHT,
-              marginTop:65,
-              zIndex:999,
+              height: HEIGHT,
+              marginTop: 65,
+              zIndex: 999,
             }}>
             <ScrollView>{searchSuggestionList}</ScrollView>
           </View>

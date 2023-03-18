@@ -125,7 +125,7 @@ class LeadRow extends PureAppComponent {
 
     return (
       <View style={style}>
-        {this.props.detail ? (
+        {this.props.detail && 0 ? (
           <View style={styles.leadContainer}>
             <View style={styles.leadTopDetail}>
               <View
@@ -338,8 +338,8 @@ class LeadRow extends PureAppComponent {
                   ...this.props.item,
                   lead: lead,
                   sharesUserOwns: (this.props.item.sharesUserOwns || 0) + 1,
-                  topPhone: lead?.topInfo?.phone || this.props.item.topPhone,
-                  topEmail: lead?.topInfo?.email || this.props.item.topEmail,
+                  topPhone: item.topPhone,
+                  topEmail: item.topEmail,
                 };
                 this.props.updateItem?.({item, index: this.props.index});
               }}

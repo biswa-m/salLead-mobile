@@ -24,18 +24,15 @@ const leadModule = {
           address: `${x.city || ''}, ${x.state || ''}`,
         }));
 
-        results.state.push(...leads.filter(x => regex1.test(x.state)));
-        results.state.push(...leads.filter(x => regex2.test(x.state)));
-        results.state = results.state
-          .filter(
-            (x, i, arr) =>
-              arr.findIndex(y => y.city == x.city && y.state == x.state) == i,
-          )
-          .filter((_, i) => i < 10)
-          .map(x => ({
-            ...pick(x, ['city', 'state', 'stateAbbrev']),
-            address: `${x.city || ''}, ${x.state || ''}`,
-          }));
+      results.state.push(...leads.filter(x => regex1.test(x.state)));
+      results.state.push(...leads.filter(x => regex2.test(x.state)));
+      results.state = results.state
+        .filter((x, i, arr) => arr.findIndex(y => y.state == x.state) == i)
+        .filter((_, i) => i < 10)
+        .map(x => ({
+          ...pick(x, ['state', 'stateAbbrev']),
+          address: `${x.state || ''}`,
+        }));
 
       return results;
     }

@@ -26,7 +26,7 @@ class LeadList extends AppComponent {
 
   async load() {
     try {
-      this.setAsyncState({error: null, loading: true});
+      await this.setAsyncState({error: null, loading: true});
       const {searchType, leads} = this.props;
 
       let count = 0;
