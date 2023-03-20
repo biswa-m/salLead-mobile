@@ -19,7 +19,10 @@ class LeadList extends AppComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps?.focused != this.props.focused) {
+    if (
+      prevProps?.focused != this.props.focused ||
+      this.props.leads?.length != prevProps.leads?.length
+    ) {
       if (!this.state.loading) this.load();
     }
   }

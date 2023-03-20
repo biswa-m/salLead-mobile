@@ -12,6 +12,7 @@ import LeadList from './LeadList';
 import {ScrollView, Text, View, Image, TouchableOpacity} from 'react-native';
 import navigationModule from '../../../Modules/navigationModule';
 import {fetchMyProfile} from '../../../Modules/auth/startup';
+import {isLoggedIn} from '../../../Stores/redux/Persisted/Selectors';
 
 class HomeScreen extends AppComponent {
   constructor(props) {
@@ -47,7 +48,7 @@ class HomeScreen extends AppComponent {
 
   _onFocus() {
     this.props.setScreenState({focused: Date.now()});
-    fetchMyProfile().catch(console.warn);
+    if (this.props.isLoogedIn) fetchMyProfile().catch(console.warn);
   }
 
   render() {
@@ -165,6 +166,7 @@ class HomeScreen extends AppComponent {
 const SCREEN_NAME = 'HOME_SCREEN';
 const mapStateToProps = state => ({
   AUTH: state.pState.AUTH,
+  isLoggedIn: isLoggedIn(state),
 });
 
 const mapDispatchToProps = dispatch => ({
