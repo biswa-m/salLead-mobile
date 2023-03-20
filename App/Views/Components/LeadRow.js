@@ -118,14 +118,14 @@ class LeadRow extends PureAppComponent {
 
     const avatarColor = avatarColors[(index || 0) % avatarColors.length];
 
-    const leadUnlocked = false;
+    const leadUnlocked = item?.sharesUserOwns > 0;
     const lockIcon = require('../../Assets/img/leads/unlockLight.png');
 
     const description = this.getDescription(item);
 
     return (
       <View style={style}>
-        {this.props.detail && 0 ? (
+        {this.props.detail ? (
           <View style={styles.leadContainer}>
             <View style={styles.leadTopDetail}>
               <View
@@ -136,37 +136,24 @@ class LeadRow extends PureAppComponent {
                 <Text style={styles.leadAvatarText}>{acronym}</Text>
               </View>
               <View style={styles.leadTopContext}>
-                <Text style={styles.leadTopNameDetail}>
-                  {item.topName || item.fullname}
-                </Text>
+                <Text style={styles.leadTopNameDetail}>{item.name}</Text>
                 <View style={styles.leadTopLocationBar}>
                   <Text style={styles.leadTopLocationDetail}>
-                    {item.topLocation || item.location}
+                    {item.city ? item.city + ', ' : ''}
+                    {item.stateAbbrev || ''}
                   </Text>
                 </View>
-                <Text style={styles.leadTopLocationDetail}>Home Buyer</Text>
-              </View>
-            </View>
-            {lead?.description || item?.description ? (
-              <View style={styles.leadContextContainerDetail}>
-                <Text style={styles.leadContextLabelDetail}>Description</Text>
-                <Text style={styles.leadContextDetail}>
-                  {/* {descriptionTextLim &&
-                (lead?.description || item.description)?.length >
-                  descriptionTextLim
-                  ? (lead?.description || item.description).substr(
-                      0,
-                      descriptionTextLim,
-                    ) + '...'
-                  : lead?.description || item.description} */}
-                  {lead?.description || item?.description}
+                <Text style={styles.leadTopLocationDetail}>
+                  {item.consumerType}
                 </Text>
               </View>
-            ) : (
-              <View style={{height: 20, width: '100%'}}></View>
-            )}
+            </View>
+            <View style={styles.leadContextContainerDetail}>
+              <Text style={styles.leadContextLabelDetail}>Description</Text>
+              <Text style={styles.leadContextDetail}>{description}</Text>
+            </View>
 
-            {leadUnlocked && !lead?.notes && !this.state.editView ? (
+            {false && leadUnlocked && !item?.notes && !this.state.editView ? (
               <TouchableOpacity
                 onPress={this.makeEditView.bind(this)}
                 style={[
@@ -185,13 +172,11 @@ class LeadRow extends PureAppComponent {
                 </View>
                 <Text style={styles.leadContextDetail}>Add Notes</Text>
               </TouchableOpacity>
-            ) : lead?.notes ? (
-              console.log(item.topPhone !== 'Phone Available', 'JOESAL')
-            ) : (
+            ) : item?.notes ? null : (
               <View></View>
             )}
 
-            {this.state.editView || lead?.notes ? (
+            {this.state.editView || item?.notes ? (
               <View style={[styles.leadContextContainerDetail, {marginTop: 0}]}>
                 <Text style={styles.leadContextLabelDetail}>Notes</Text>
                 {this.state.editMode ? (
@@ -211,7 +196,7 @@ class LeadRow extends PureAppComponent {
                 {this.state.editMode == true ? (
                   <TextInput
                     multiline
-                    defaultValue={this.state.editSubmitValue || lead?.notes}
+                    defaultValue={this.state.editSubmitValue || item?.notes}
                     placeholder={'Start typing'}
                     placeholderTextColor={'#CAF8C3'}
                     onChangeText={text => this.setText(text)}
@@ -220,7 +205,7 @@ class LeadRow extends PureAppComponent {
                 ) : (
                   <Text style={styles.leadContextDetail}>
                     {this.state.editSubmitValue ||
-                      lead?.notes ||
+                      item?.notes ||
                       'Press edit to begin'}{' '}
                   </Text>
                 )}
@@ -285,7 +270,7 @@ class LeadRow extends PureAppComponent {
               <TouchableOpacity
                 style={[styles.qzLeadActionCall, styles.qzLeadAction]}
                 hitSlop={{top: 20, bottom: 20, left: 20, right: 5}}
-                onPress={() => callNumber(item?.topPhone)}
+                onPress={() => leadUnlocked && callNumber(item?.phone)}
                 // disabled={!leadUnlocked}
               >
                 <Image
@@ -302,7 +287,7 @@ class LeadRow extends PureAppComponent {
                 style={[styles.qzLeadActionMessage, styles.qzLeadAction]}
                 // disabled={!leadUnlocked}
                 hitSlop={{top: 20, bottom: 20, left: 5, right: 5}}
-                onPress={() => sendSMS({phone: item?.topPhone})}>
+                onPress={() => leadUnlocked && sendSMS({phone: item?.phone})}>
                 <Image
                   source={
                     leadUnlocked
@@ -317,7 +302,7 @@ class LeadRow extends PureAppComponent {
                 style={[styles.qzLeadActionEmail, styles.qzLeadAction]}
                 // disabled={!leadUnlocked}
                 hitSlop={{top: 20, bottom: 20, left: 5, right: 10}}
-                onPress={() => sendEmail({to: item.topEmail})}>
+                onPress={() => leadUnlocked && sendEmail({to: item.email})}>
                 <Image
                   source={
                     leadUnlocked
@@ -332,17 +317,7 @@ class LeadRow extends PureAppComponent {
             <UnlockLead
               mode="browseScreen"
               {..._.pick(this.props, ['lead', 'item', 'index'])}
-              onSuccess={({lead}) => {
-                if (!lead) return;
-                const item = {
-                  ...this.props.item,
-                  lead: lead,
-                  sharesUserOwns: (this.props.item.sharesUserOwns || 0) + 1,
-                  topPhone: item.topPhone,
-                  topEmail: item.topEmail,
-                };
-                this.props.updateItem?.({item, index: this.props.index});
-              }}
+              onSuccess={({item}) => {}}
             />
           </View>
         ) : (

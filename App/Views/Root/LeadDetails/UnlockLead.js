@@ -17,24 +17,46 @@ import UnpActions from '../../../Stores/redux/Unpersisted/Actions';
 import api from '../../../Services/Api/api';
 import {isLoggedIn} from '../../../Stores/redux/Persisted/Selectors';
 import navigationModule from '../../../Modules/navigationModule';
+import apiModule from '../../../Modules/api/apiModule';
 
 class UnlockLeadInner extends AppComponent {
   state = {loading: false, error: null};
 
+  async getLead(id) {
+    return apiModule
+      .loadLeads({
+        where: {['data.id']: id},
+      })
+      .then(x => x?.[0]);
+  }
+
   async load() {
     try {
-      if (!this.props?.item?.leadid) {
+      if (!this.props?.item?.id) {
         throw new Error('Loading Failed. Invalid lead id');
       }
-      this.setAsyncState({loading: true, error: null});
-      const {data: lead} = await api
-        .get('/real-estate-lead-details/' + this.props.item?.leadid, {
-          format: 'json',
-        })
-        .then(x => x.data);
+      await this.setAsyncState({loading: true, error: null});
 
-      this.setAsyncState({loading: false});
-      this.props.setScreenState({lead});
+      const lead = await this.getLead(this.props.item.id);
+
+      if (!lead?.id) {
+        throw new Error('Loading Failed. Invalid lead id');
+      }
+
+      this.props.setScreenState({item: lead});
+
+      const index = this.props.leads.findIndex(x => x.id == lead.id);
+      if (index > -1) {
+        this.props.setScreenState(
+          {
+            leads: update(this.props.leads, {$merge: {[index]: lead}}),
+          },
+          true,
+          'APP_DATA',
+        );
+      }
+
+      await this.setAsyncState({loading: false});
       return lead;
     } catch (e) {
       this.setAsyncState({error: e.message, loading: false});
@@ -45,66 +67,32 @@ class UnlockLeadInner extends AppComponent {
 
   async unlock() {
     try {
-      if (!this.props?.item?.leadid) {
+      if (!this.props?.item?.id) {
         throw new Error('Loading Failed. Invalid lead id');
       }
       await this.setAsyncState({error: null});
       this.props.setScreenState({unlocking: true});
 
-      const {data: lead} = await api
-        .get('/real-estate-lead-details/' + this.props.item?.leadid, {
-          format: 'json',
-        })
-        .then(x => x.data);
+      const item = this.props.item;
 
-      if (!lead) throw new Error('Loading Failed. Lead not found');
-      this.props.setScreenState({lead});
-
-      if (lead.currentUserOwnsLead) {
-        throw new Error('You have already unlocked the lead');
-      }
-
-      if (lead?.shareBoxes.sharesLeft === 0) {
-        throw new Error(
-          'Sorry! This lead has already been claimed, and is no longer available.',
-        );
-      }
-
-      const unlockPayload = {
-        lead: this.props.item?.leadid,
-        sharesRequested: 1,
-        format: 'json',
-        islegacy: lead.isLegacy,
-      };
-
-      console.warn({unlockPayload, lead});
-      const unlockData = await api
-        .get('/leads/buy', unlockPayload)
-        .then(x => x.data);
-
-      await this.setAsyncState({unlockData});
-      this.props.setScreenState({unlocking: false});
-      console.info({unlockData: JSON.stringify(unlockData, null, 4)});
-
+      await apiModule.unlock(item);
       const updatedLead = await this.load();
 
-      if (!['purchasecomplete'].includes(unlockData?.data?.claimStatus)) {
-        if (unlockData?.data?.alertText)
-          throw new Error(unlockData?.data?.alertText?.toString());
-      } else {
-        this.props.onSuccess?.({lead: updatedLead});
-        this.props.setScreenState(
-          {reloadSearch: Date.now()},
-          false,
-          'MY_LEADS_SCREEN',
-        );
+      this.props.setScreenState({unlocking: false});
 
-        Alert.alert('Success', 'Lead Unlocked');
-      }
+      this.props.onSuccess?.({item: updatedLead});
+      this.props.setScreenState(
+        {reloadSearch: Date.now()},
+        false,
+        'MY_LEADS_SCREEN',
+      );
+
+      Alert.alert('Success', 'Lead Unlocked');
     } catch (e) {
       this.setAsyncState({error: e.message});
       this.props.setScreenState({unlocking: false});
       this.props.onFail?.(e);
+      this.load();
       Alert.alert('Error', e.message);
     }
   }
@@ -112,17 +100,20 @@ class UnlockLeadInner extends AppComponent {
   async flagLead() {
     try {
       const res = await api
-        .post('leads/report-lead?leadid=' + this.props.item?.leadid + '&format=json', {
-          leadid: this.props.item?.leadid,
-          reporter_desc: 'Lead flagged from SalLead App.',
-          // submit: 'Report This Profile'
-        })
+        .post(
+          'leads/report-lead?leadid=' + this.props.item?.id + '&format=json',
+          {
+            id: this.props.item?.id,
+            reporter_desc: 'Lead flagged from SalLead App.',
+            // submit: 'Report This Profile'
+          },
+        )
         .then(x => x.data);
 
-      console.info(this.props.item?.leadid, 'Request passed');
-      navigationModule.exec('goBack', [null])
+      console.info(this.props.item?.id, 'Request passed');
+      navigationModule.exec('goBack', [null]);
     } catch (error) {
-      // console.log(this.state.leadid, 'Request failed')
+      // console.log(this.state.id, 'Request failed')
       console.log(error);
     }
   }
@@ -130,10 +121,10 @@ class UnlockLeadInner extends AppComponent {
   flagAction() {
     Alert.alert('Flag Lead', 'Are you sure you would like to flag this lead?', [
       {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
       },
-      { text: "Confirm", onPress: () => this.flagLead() }
+      {text: 'Confirm', onPress: () => this.flagLead()},
     ]);
   }
 
@@ -143,62 +134,55 @@ class UnlockLeadInner extends AppComponent {
       state: {loading},
     } = this;
 
-    const leadUnlocked = lead
-      ? lead.currentUserOwnsLead
-      : item
-      ? item?.sharesUserOwns > 0
-      : false;
-
-      console.log(lead, 'THIS IS LEAD')
+    const leadUnlocked = item?.sharesUserOwns > 0;
 
     if (mode == 'leadDetails') {
-      if (lead?.currentUserOwnsLead && lead?.isValidLead == true) return (
-        <View style={styles.unlockLeadButton}>
-          <TouchableOpacity
-            style={styles.unlockLeadButtonInner}
-            hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
-            onPress={() => {
-              if (!this.props.isLoggedIn) {
-                this.props.setScreenState(
-                  {isVisible: true},
-                  false,
-                  'LOGIN_SCREEN',
-                );
-              } else {
-                this.flagAction();
-              }
-            }}
-            disabled={unlocking || loading}>
-            <Image
-              source={require('../../../Assets/img/detail/lockOrange.png')}
-              style={styles.smallWhiteButtonIco}
-            />
-            <Text style={[styles.unlockLeadButtonLabel, {color:'#e67e22'}]}>
-              Flag Data
-            </Text>
-          </TouchableOpacity>
-        </View>
-      );
-      if (lead?.currentUserOwnsLead && lead?.isValidLead == false) return (
-        <View style={styles.unlockLeadButton}>
-          <TouchableOpacity disabled
-            style={styles.unlockLeadButtonInner}
-            hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
-            
-            >
-            <Image
-              source={require('../../../Assets/img/detail/lockOrange.png')}
-              style={styles.smallWhiteButtonIco}
-            />
-            <Text style={[styles.unlockLeadButtonLabel, {color:'#e67e22'}]}>
-              You have flagged this lead.
-            </Text>
-          </TouchableOpacity>
-        </View>
-      );
-      if (lead?.currentUserOwnsLead) return (
-        null
-      );
+      // if (leadUnlocked && lead?.isValidLead == true)
+      //   return (
+      //     <View style={styles.unlockLeadButton}>
+      //       <TouchableOpacity
+      //         style={styles.unlockLeadButtonInner}
+      //         hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
+      //         onPress={() => {
+      //           if (!this.props.isLoggedIn) {
+      //             this.props.setScreenState(
+      //               {isVisible: true},
+      //               false,
+      //               'LOGIN_SCREEN',
+      //             );
+      //           } else {
+      //             this.flagAction();
+      //           }
+      //         }}
+      //         disabled={unlocking || loading}>
+      //         <Image
+      //           source={require('../../../Assets/img/detail/lockOrange.png')}
+      //           style={styles.smallWhiteButtonIco}
+      //         />
+      //         <Text style={[styles.unlockLeadButtonLabel, {color: '#e67e22'}]}>
+      //           Flag Data
+      //         </Text>
+      //       </TouchableOpacity>
+      //     </View>
+      //   );
+      // if (leadUnlocked && !lead?.isValidLead)
+      //   return (
+      //     <View style={styles.unlockLeadButton}>
+      //       <TouchableOpacity
+      //         disabled
+      //         style={styles.unlockLeadButtonInner}
+      //         hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
+      //         <Image
+      //           source={require('../../../Assets/img/detail/lockOrange.png')}
+      //           style={styles.smallWhiteButtonIco}
+      //         />
+      //         <Text style={[styles.unlockLeadButtonLabel, {color: '#e67e22'}]}>
+      //           You have flagged this lead.
+      //         </Text>
+      //       </TouchableOpacity>
+      //     </View>
+      //   );
+      if (leadUnlocked) return null;
       return (
         <View style={styles.unlockLeadButton}>
           <TouchableOpacity
@@ -264,7 +248,7 @@ class UnlockLeadInner extends AppComponent {
 
               <Text style={styles.qzLeadActionLabel}>View</Text>
             </TouchableOpacity>
-          )}     
+          )}
         </>
       );
     } else
@@ -288,14 +272,14 @@ class UnlockLeadInner extends AppComponent {
               />
               <Text style={styles.smallWhiteButtonLabel}>Unlock</Text>
             </TouchableOpacity>
-          ) : lead?.currentUserOwnsLead ? (
-              <TouchableOpacity style={styles.smallWhiteButton} disabled>
-                <View style={styles.customCheckBox}>
-                  <View style={styles.check1}></View>
-                  <View style={styles.check2}></View>
-                </View>
-                <Text style={styles.smallWhiteButtonLabel}>Lead Unlocked</Text>
-              </TouchableOpacity>
+          ) : leadUnlocked ? (
+            <TouchableOpacity style={styles.smallWhiteButton} disabled>
+              <View style={styles.customCheckBox}>
+                <View style={styles.check1}></View>
+                <View style={styles.check2}></View>
+              </View>
+              <Text style={styles.smallWhiteButtonLabel}>Lead Unlocked</Text>
+            </TouchableOpacity>
           ) : (
             <TouchableOpacity
               style={styles.smallWhiteButton}
@@ -321,7 +305,7 @@ class UnlockLeadLeadDetailsScreenInner extends AppComponent {
       <UnlockLeadInner
         {...this.props}
         onSuccess={data => {
-          const lead = data?.lead;
+          const lead = data?.item;
 
           if (this.props.onSuccess) {
             this.props.onSuccess(data);
@@ -335,16 +319,10 @@ class UnlockLeadLeadDetailsScreenInner extends AppComponent {
               i++
             ) {
               const item = this.props.browseScreenLeadData.leads[i];
-              if (item?.leadid && item?.leadid === lead?.leadid) {
+              if (item?.id && item?.id === lead?.id) {
                 updateObj = {
                   ...updateObj,
-                  [i]: {
-                    ...item,
-                    lead: lead,
-                    sharesUserOwns: (item.sharesUserOwns || 0) + 1,
-                    topPhone: lead?.topInfo?.phone || item.topPhone,
-                    topEmail: lead?.topInfo?.email || item.topEmail,
-                  },
+                  [i]: lead,
                 };
               }
             }
@@ -377,6 +355,7 @@ const mapStateToProps = state => ({
   lead: state.vState[SCREEN_NAME]?.lead,
   unlocking: state.vState[SCREEN_NAME]?.unlocking,
   isLoggedIn: isLoggedIn(state),
+  leads: state.pState['APP_DATA']?.leads,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -420,6 +399,7 @@ class UnlockLead extends AppComponent {
 export default connect(
   state => ({
     isLoggedIn: isLoggedIn(state),
+    leads: state.pState['APP_DATA']?.leads,
   }),
   dispatch => ({
     setScreenState: (obj, persist = false, screenName = SCREEN_NAME) =>

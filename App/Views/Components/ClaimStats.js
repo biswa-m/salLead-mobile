@@ -19,20 +19,30 @@ class ClaimStats extends AppComponent {
         <View style={styles.creditBox}>
           <View style={styles.creditItem}>
             <View>
-              <Text style={styles.legacyCount}>{this.props.claimStats?.legacy_claims_available ? this.props.claimStats?.legacy_claims_available : 0}</Text>
+              <Text style={styles.legacyCount}>
+                {this.props.user?.credit?.legacy || 0}
+              </Text>
               <Text style={styles.creditLabel}>Legacy</Text>
             </View>
-            <Image source={require('../../Assets/img/local/legacy.png')} style={styles.qzCreditIco}/>
+            <Image
+              source={require('../../Assets/img/local/legacy.png')}
+              style={styles.qzCreditIco}
+            />
           </View>
 
           <View style={styles.creditSeperator}></View>
 
           <View style={styles.creditItem}>
             <View>
-              <Text style={styles.creditCount}>{this.props.claimStats?.claims_available ? this.props.claimStats?.claims_available : 0}</Text>
+              <Text style={styles.creditCount}>
+                {this.props.user?.credit?.credit || 0}
+              </Text>
               <Text style={styles.creditLabel}>Credits</Text>
             </View>
-            <Image source={require('../../Assets/img/local/credits.png')} style={styles.qzCreditIco}/>
+            <Image
+              source={require('../../Assets/img/local/credits.png')}
+              style={styles.qzCreditIco}
+            />
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -42,7 +52,7 @@ class ClaimStats extends AppComponent {
 
 const SCREEN_NAME = 'APP_DATA';
 const mapStateToProps = state => ({
-  claimStats: state.pState['AUTH']?.account?.claimStats,
+  user: state.pState['AUTH']?.user,
   isLoggedIn: isLoggedIn(state),
 });
 

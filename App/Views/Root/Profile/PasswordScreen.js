@@ -45,7 +45,7 @@ class PasswordScreen extends AppComponent {
       navigationModule.exec('goBack', [null]);
     }
 
-    const {user} = this.props.AUTH || {};
+    const {user} = this.props || {};
 
     const disabled =
       !this.state.password ||

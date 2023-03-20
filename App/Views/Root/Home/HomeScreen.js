@@ -11,6 +11,7 @@ import SearchBar from './SearchBar';
 import LeadList from './LeadList';
 import {ScrollView, Text, View, Image, TouchableOpacity} from 'react-native';
 import navigationModule from '../../../Modules/navigationModule';
+import {fetchMyProfile} from '../../../Modules/auth/startup';
 
 class HomeScreen extends AppComponent {
   constructor(props) {
@@ -46,6 +47,7 @@ class HomeScreen extends AppComponent {
 
   _onFocus() {
     this.props.setScreenState({focused: Date.now()});
+    fetchMyProfile().catch(console.warn);
   }
 
   render() {
@@ -68,23 +70,31 @@ class HomeScreen extends AppComponent {
                   />
                 </TouchableOpacity>
               </View>
-             
-              <Text style={{fontSize:25, color: 'white', fontWeight: '700'}}>𝕊𝕒𝕝𝕃𝕖𝕒𝕕</Text>
+
+              <Text style={{fontSize: 25, color: 'white', fontWeight: '700'}}>
+                𝕊𝕒𝕝𝕃𝕖𝕒𝕕
+              </Text>
 
               <View style={styles.qzHeaderButtonSmall}>
                 <TouchableOpacity
-                 activeOpacity={0.8}
+                  activeOpacity={0.8}
                   onPress={() =>
                     navigationModule.exec('navigate', ['/main/profile'])
                   }
                   style={styles.qzHeaderButtonSmall}
                   hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
-                  {
-                    account?.photo ? 
-                    <Image source={{uri: account?.photo}} style={styles.qzHeaderAvatarIco}/>
-                    :
-                    <Text style={styles.qzUserLoggedText}>{user && user.fullName ? user.fullName.slice(0, 2).toUpperCase() : 'MY'}</Text>
-                  }
+                  {account?.photo ? (
+                    <Image
+                      source={{uri: account?.photo}}
+                      style={styles.qzHeaderAvatarIco}
+                    />
+                  ) : (
+                    <Text style={styles.qzUserLoggedText}>
+                      {user && user.fullName
+                        ? user.fullName.slice(0, 2).toUpperCase()
+                        : 'MY'}
+                    </Text>
+                  )}
                 </TouchableOpacity>
               </View>
             </View>
@@ -109,7 +119,7 @@ class HomeScreen extends AppComponent {
             <View style={styles.qzHeaderSpace}></View>
           </SafeAreaView>
         </View>
-        <View style={[styles.containerOffset, {zIndex:1,}]}>
+        <View style={[styles.containerOffset, {zIndex: 1}]}>
           <View style={styles.pad20}>
             <View style={styles.shadowBox}>
               <SearchBar />

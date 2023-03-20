@@ -19,11 +19,11 @@ class BrowseScreen extends AppComponent {
   render() {
     return (
       <View style={styles.bgGreen}>
-        <SafeAreaView edges={['top']} style={styles.fill}>   
-            <SearchBar />
-            <View style={styles.browseListContainer}>
-              <LeadList browse/>
-            </View>
+        <SafeAreaView edges={['top']} style={styles.fill}>
+          <SearchBar />
+          <View style={styles.browseListContainer}>
+            <LeadList browse />
+          </View>
         </SafeAreaView>
       </View>
     );

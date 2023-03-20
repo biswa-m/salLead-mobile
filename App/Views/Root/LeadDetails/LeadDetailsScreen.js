@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {connect} from 'react-redux';
+import update from 'immutability-helper';
 
 import AppComponent from '../../../Components/RN/AppComponent';
 import styles from '../../../Styles/styles';
@@ -22,7 +23,7 @@ import LeadDetailsTabNavigator from './LeadDetailsTabNavigator';
 import api from '../../../Services/Api/api';
 import {isLoggedIn} from '../../../Stores/redux/Persisted/Selectors';
 import UnlockLead from './UnlockLead';
-import update from 'immutability-helper';
+import apiModule from '../../../Modules/api/apiModule';
 
 class LeadDetailsScreen extends AppComponent {
   state = {loading: false, error: null, unlocking: false};
@@ -32,75 +33,42 @@ class LeadDetailsScreen extends AppComponent {
     this.load();
   }
 
-  async load() {
-    try {
-      if (!this.props?.item?.leadid) {
-        throw new Error('Loading Failed. Invalid lead id');
-      }
-      this.setAsyncState({loading: true, error: null});
-      const {data: lead} = await api
-        .get('/real-estate-lead-details/' + this.props.item?.leadid, {
-          format: 'json',
-        })
-        .then(x => x.data);
-
-      this.setAsyncState({loading: false});
-      this.props.setScreenState({lead});
-    } catch (e) {
-      this.setAsyncState({error: e.message, loading: false});
-      Alert.alert('Error', e.message);
-    }
+  async getLead(id) {
+    return apiModule
+      .loadLeads({
+        where: {['data.id']: id},
+      })
+      .then(x => x?.[0]);
   }
 
-  
- 
-  async unlock() {
+  async load() {
     try {
-      if (!this.props?.item?.leadid) {
+      if (!this.props?.item?.id) {
         throw new Error('Loading Failed. Invalid lead id');
       }
-      this.setAsyncState({unlocking: true, error: null});
+      await this.setAsyncState({loading: true, error: null});
 
-      const {data: lead} = await api
-        .get('/real-estate-lead-details/' + this.props.item?.leadid, {
-          format: 'json',
-        })
-        .then(x => x.data);
+      const lead = await this.getLead(this.props.item.id);
 
-      if (!lead) throw new Error('Loading Failed. Lead not found');
-      this.props.setScreenState({lead});
-
-      if (lead.currentUserOwnsLead) {
-        throw new Error('You have already unlocked the lead');
+      if (!lead?.id) {
+        throw new Error('Loading Failed. Invalid lead id');
       }
 
-      if (lead?.shareBoxes.sharesLeft === 0) {
-        throw new Error(
-          'Sorry! This lead has already been claimed, and is no longer available.',
+      this.props.setScreenState({item: lead});
+
+      const index = this.props.leads.findIndex(x => x.id == lead.id);
+      if (index > -1)
+        this.props.setScreenState(
+          {
+            leads: update(this.props.leads, {$merge: {[index]: lead}}),
+          },
+          true,
+          'APP_DATA',
         );
-      }
 
-      const unlockData = await api
-        .get('/leads/buy', {
-          lead: this.props.item?.leadid,
-          sharesRequested: 4,
-          format: 'json',
-        })
-        .then(x => x.data);
-
-      await this.setAsyncState({unlocking: false, unlockData});
-      console.info({unlockData: JSON.stringify(unlockData, null, 4)});
-
-      this.load();
-
-      if (!['purchasecomplete'].includes(unlockData?.data?.claimStatus)) {
-        if (unlockData?.data?.alertText)
-          throw new Error(unlockData?.data?.alertText?.toString());
-      } else {
-        Alert.alert('Success', 'Lead Unlocked');
-      }
+      await this.setAsyncState({loading: false});
     } catch (e) {
-      this.setAsyncState({error: e.message, unlocking: false});
+      this.setAsyncState({error: e.message, loading: false});
       Alert.alert('Error', e.message);
     }
   }
@@ -141,7 +109,7 @@ class LeadDetailsScreen extends AppComponent {
 
   render() {
     const {
-      props: {item, index, lead},
+      props: {item, index},
       state: {loading, unlocking},
     } = this;
 
@@ -162,23 +130,30 @@ class LeadDetailsScreen extends AppComponent {
                 />
                 <Text style={styles.backText}>Details</Text>
               </TouchableOpacity>
-           
-                <UnlockLead />
+
+              <UnlockLead />
             </View>
           </SafeAreaView>
           <LeadRow
-            {...{item, index, lead, onNoteUpdate: this.onNoteUpdate.bind(this)}}
+            {...{item, index, onNoteUpdate: this.onNoteUpdate.bind(this)}}
             detail
           />
         </View>
 
-        {loading && !lead ? (
-          <ActivityIndicator />
-        ) : (
-          <View style={styles.bgGreen}>
-            <LeadDetailsTabNavigator />
-          </View>
-        )}
+        <View style={{flex: 1}}>
+          {item ? (
+            <View style={styles.bgGreen}>
+              <LeadDetailsTabNavigator />
+            </View>
+          ) : null}
+          {loading ? (
+            <ActivityIndicator
+              size={'small'}
+              style={{position: 'absolute', left: 0, right: 0, top: 69}}
+              color="lightgreen"
+            />
+          ) : null}
+        </View>
       </View>
     );
   }
@@ -188,8 +163,8 @@ const SCREEN_NAME = 'LEAD_DETAILS_SCREEN';
 const mapStateToProps = state => ({
   item: state.vState[SCREEN_NAME]?.item,
   index: state.vState[SCREEN_NAME]?.index,
-  lead: state.vState[SCREEN_NAME]?.lead,
   isLoggedIn: isLoggedIn(state),
+  leads: state.pState['APP_DATA']?.leads,
 
   myLeadsLeadData: state.vState.MY_LEADS_SCREEN?.leadData,
 });

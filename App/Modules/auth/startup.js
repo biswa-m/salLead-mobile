@@ -42,17 +42,18 @@ const saveNotification = async remoteMessage => {
   console.info(JSON.stringify(updated, null, 2));
 };
 
-export const initAuth = async () => {
-  let state = store?.getState();
+export const fetchMyProfile = async () => {
+  const {user} = await apiModule.fetchMyProfile();
+  // console.warn(user, Math.random());
+  store.dispatch(
+    PersistedActions.setPScreenState('AUTH', {
+      user,
+    }),
+  );
+};
 
-  if (store) {
-    const {user} = await apiModule.fetchMyProfile();
-    store.dispatch(
-      PersistedActions.setPScreenState('AUTH', {
-        user,
-      }),
-    );
-  }
+export const initAuth = async () => {
+  await fetchMyProfile();
 
   pushNotificationModule.init({onChangeToken});
 };

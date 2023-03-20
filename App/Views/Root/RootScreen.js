@@ -29,6 +29,14 @@ class RootScreen extends Component {
       .then(leads => this.props.setScreenState({leads}, true));
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.isLoggedIn != this.props.isLoggedIn) {
+      apiModule
+        .loadLeads()
+        .then(leads => this.props.setScreenState({leads}, true));
+    }
+  }
+
   render() {
     return (
       <SafeAreaProvider>

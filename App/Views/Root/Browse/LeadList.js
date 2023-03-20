@@ -19,13 +19,14 @@ import LeadRow from '../../Components/LeadRow';
 import api from '../../../Services/Api/api';
 import navigationModule from '../../../Modules/navigationModule';
 import config from '../../../Config';
+import apiModule from '../../../Modules/api/apiModule';
 
 class LeadList extends AppComponent {
   state = {loading: false, reloading: false, error: null, firstTimeLoad: true};
 
   componentDidMount() {
     this.onMount();
-    this.load();
+    this.load().then(() => this.load({fromRemote: true}));
     // if (this.props.location || this.props.keyword) this.load();
     // else
     //   this.load({
@@ -38,7 +39,10 @@ class LeadList extends AppComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.reloadSearch != this.props.reloadSearch) {
+    if (
+      prevProps.reloadSearch != this.props.reloadSearch ||
+      prevProps.leads?.length != this.props.leads?.length
+    ) {
       setTimeout(() => {
         this.load();
       }, 50);
@@ -54,7 +58,7 @@ class LeadList extends AppComponent {
 
       const {
         searchType,
-        leads,
+        leads: leadProps,
         location,
         keyword,
         creditHistory,
@@ -71,7 +75,12 @@ class LeadList extends AppComponent {
       };
       let count = 0;
 
-      console.warn(lastSearchDetails);
+      let leads = leadProps;
+      if (opt?.fromRemote) {
+        leads = await apiModule.loadLeads();
+        this.props.setScreenState({leads}, true, 'APP_DATA');
+      }
+
       const keywordRegex = keyword && new RegExp(`.*${keyword}.*`, 'i');
       const financingFilter = financing
         ? financing.split(',').map(x => parseFloat(x))
@@ -229,7 +238,7 @@ class LeadList extends AppComponent {
           refreshControl={
             <RefreshControl
               refreshing={!!this.state.reloading}
-              onRefresh={() => this.load()}
+              onRefresh={() => this.load({fromRemote: true})}
             />
           }
           onEndReached={this.loadMore.bind(this)}

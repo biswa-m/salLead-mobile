@@ -16,91 +16,23 @@ import styles from '../../../Styles/styles';
 import PActions from '../../../Stores/redux/Persisted/Actions';
 import UnpActions from '../../../Stores/redux/Unpersisted/Actions';
 import UnlockLead from './UnlockLead';
+import {DateTime} from 'luxon';
 
 class AboutTab extends AppComponent {
-  rows = [
-    {
-      key: '',
-      title: 'd',
-    },
-    {
-      key: 'age',
-      title: 'Added',
-    },
-  ];
-
-  renderRow({key, title, getValue, render, value}) {
-    const result = value
-      ? value
-      : getValue
-      ? getValue(this.props.item)
-      : this.props.item?.[key];
-
-    if (!result) return null;
+  renderRow({title, value, ico, render}) {
+    if (!value) return null;
 
     return (
-      <View style={styles.leadDetailContextRow} key={key}>
-        
-        {title == 'I Live In' ? (
-          <Image
-            source={require('../../../Assets/img/detail/pinIcon.png')}
-            style={styles.leadDetailContextIco}
-          />
-        ) : title == 'My Preferred Area' ? (
-          <Image
-            source={require('../../../Assets/img/detail/mapIcon.png')}
-            style={styles.leadDetailContextIco}
-          />
-        ) : title == 'My Credit History' ? (
-          <Image
-            source={require('../../../Assets/img/detail/creditIco.png')}
-            style={styles.leadDetailContextIco}
-          />
-        ) : title == 'I Currently' ? (
-          <Image
-            source={require('../../../Assets/img/detail/homeIco.png')}
-            style={styles.leadDetailContextIco}
-          />
-        ) : title == 'My Home Value' ? (
-          <Image
-            source={require('../../../Assets/img/detail/homeIco.png')}
-            style={styles.leadDetailContextIco}
-          />
-        ) : title == 'My Income Range' ? (
-          <Image
-            source={require('../../../Assets/img/detail/incomeIco.png')}
-            style={styles.leadDetailContextIco}
-          />
-        ) : title == 'Cashon Hand' ? (
-          <Image
-            source={require('../../../Assets/img/detail/incomeIco.png')}
-            style={styles.leadDetailContextIco}
-          />
-        ) : title == 'Move Timeframe' ? (
-          <Image
-            source={require('../../../Assets/img/detail/homeIco.png')}
-            style={styles.leadDetailContextIco}
-          />
-        ) : (
-          <Image
-            source={require('../../../Assets/img/detail/homeIco.png')}
-            style={styles.leadDetailContextIco}
-          />
-        )}
+      <View style={styles.leadDetailContextRow} key={title}>
+        <Image source={ico} style={styles.leadDetailContextIco} />
+
         <View style={styles.LeadDetailContext}>
           <Text style={styles.leadDetailContextLabel}>{title}</Text>
-
-          {title == 'My Home Value' ? (
-            <Text
-              style={[
-                styles.leadDetailContextValue,
-                styles.leadDetailValueGold,
-              ]}>
-              {render ? render(item) : result?.toString()}
-            </Text>
+          {render ? (
+            render(item)
           ) : (
             <Text style={styles.leadDetailContextValue}>
-              {render ? render(item) : result?.toString()}
+              {value?.toString()}
             </Text>
           )}
         </View>
@@ -110,8 +42,67 @@ class AboutTab extends AppComponent {
 
   render() {
     const {
-      props: {lead},
+      props: {item},
     } = this;
+
+    const aboutMeCoulumns = [
+      {
+        title: 'I Live In',
+        ico: require('../../../Assets/img/detail/pinIcon.png'),
+        value: `${item.city}, ${item.state}`,
+      },
+      {
+        title: 'My Preferred Area',
+        ico: require('../../../Assets/img/detail/mapIcon.png'),
+        value: `${item.lookingAtCity}, ${item.lookingAtState}`,
+      },
+      {
+        title: 'My Credit History',
+        ico: require('../../../Assets/img/detail/creditIco.png'),
+        value: item.creditHistory,
+      },
+      {
+        title: 'I Currently',
+        ico: require('../../../Assets/img/detail/homeIco.png'),
+        value: '',
+      },
+      {
+        title: 'My Home Value',
+        ico: require('../../../Assets/img/detail/homeIco.png'),
+        value: '',
+      },
+      {
+        title: 'My Income Range',
+        ico: require('../../../Assets/img/detail/incomeIco.png'),
+        value: '$' + item.income + 'K',
+      },
+      {
+        title: 'Cashon Hand',
+        ico: require('../../../Assets/img/detail/incomeIco.png'),
+        value: '',
+      },
+      {
+        title: 'Move Timeframe',
+        ico: require('../../../Assets/img/detail/homeIco.png'),
+        value: '',
+      },
+      {
+        title: 'Date Added',
+        ico: require('../../../Assets/img/detail/homeIco.png'),
+        value: DateTime.fromMillis(parseInt(item.ts)).toFormat('LLL dd yyyy, hh:mm a'),
+      },
+    ];
+    const lookingForColumns = [
+      {
+        title: 'Purchase Price',
+        ico: require('../../../Assets/img/detail/incomeIco.png'),
+        value: `${
+          item.minBudget
+            ? `$${item.minBudget?.toLocaleString()}-$${item.budget?.toLocaleString()}`
+            : `less than $${item.budget?.toLocaleString()}`
+        }`,
+      },
+    ];
 
     return (
       <View style={styles.tabContextParent}>
@@ -123,35 +114,17 @@ class AboutTab extends AppComponent {
                   <Text>About Me</Text>
                 </View> */}
 
-                {lead?.aboutMe
-                  ? Object.keys(lead?.aboutMe).map(key =>
-                      this.renderRow({
-                        key,
-                        title: _.startCase(key),
-                        value: lead?.aboutMe?.[key],
-                      }),
-                    )
-                  : null}
+                {aboutMeCoulumns.map(x => this.renderRow(x))}
               </View>
             </View>
 
-            {lead?.lookingFor ?
             <View style={styles.contextCategoryBox}>
               <Text style={styles.contextCategoryLabel}>Looking For</Text>
-            </View> : <View></View>
-            }
+            </View>
 
             <View style={styles.detailContextWrapperParent}>
               <View style={styles.detailContextWrapper}>
-                {lead?.lookingFor
-                  ? Object.keys(lead?.lookingFor).map(key =>
-                      this.renderRow({
-                        key,
-                        title: _.startCase(key),
-                        value: lead?.lookingFor?.[key],
-                      }),
-                    )
-                  : null}
+                {lookingForColumns.map(x => this.renderRow(x))}
               </View>
             </View>
 
@@ -165,7 +138,7 @@ class AboutTab extends AppComponent {
 
 const SCREEN_NAME = 'LEAD_DETAILS_SCREEN';
 const mapStateToProps = state => ({
-  lead: state.vState[SCREEN_NAME]?.lead,
+  item: state.vState[SCREEN_NAME]?.item,
 });
 
 const mapDispatchToProps = dispatch => ({
