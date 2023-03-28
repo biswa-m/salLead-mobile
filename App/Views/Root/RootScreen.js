@@ -26,7 +26,8 @@ class RootScreen extends Component {
 
     apiModule
       .loadLeads()
-      .then(leads => this.props.setScreenState({leads}, true));
+      .then(leads => this.props.setScreenState({leads}, true))
+      .catch(console.warn);
   }
 
   componentDidUpdate(prevProps) {
